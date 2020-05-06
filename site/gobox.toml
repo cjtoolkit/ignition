@@ -1,0 +1,24 @@
+[[module]]
+repo = "github.com/CJ-Jackson/generate"
+tag = "771002bf12d0281f0e06613a711303fb8642c7c0"
+binPath = "tools"
+installs = [
+	"debugflag",
+	"gmock"
+]
+
+[[module]]
+repo = "github.com/golang/mock"
+tag = "v1.4.3"
+binPath = "tools"
+installs = [
+	"mockgen"
+]
+
+[[module]]
+repo = "github.com/cjtoolkit/embedder"
+tag = "v1.0.0"
+binPath = "tools"
+installs = [
+	"."
+]

@@ -16,7 +16,7 @@ type Router interface {
 	Handle(method, path string, handle Handle)
 	Handler(method, path string, handler http.Handler)
 	HandlerFunc(method, path string, handler http.HandlerFunc)
-	Lookup(method, path string) (Handle, Params, bool)
+	Lookup(method, path string) (httprouter.Handle, Params, bool)
 	OPTIONS(path string, handle Handle)
 	PATCH(path string, handle Handle)
 	POST(path string, handle Handle)

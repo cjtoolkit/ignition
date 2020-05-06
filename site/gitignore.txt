@@ -26,6 +26,16 @@ _testmain.go
 .glide
 .vscode
 
+/asset/live
+/asset/node_modules
+/asset/config
+/asset/yarn-error.log
+/asset/.yarn/*
+!/asset/.yarn/releases
+!/asset/.yarn/plugins
+/asset/.pnp.*
+/asset/link
+
 /vendor/
 
 /bin

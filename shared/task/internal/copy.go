@@ -31,15 +31,10 @@ func CopyFolder(dst, src string) error {
 			fmt.Println()
 			return os.Mkdir(dstPath+filepath.FromSlash("/"+path), info.Mode())
 		}
-		fmt.Printf("Copying: %s -> %s", path, dst+filepath.FromSlash("/"+path))
-		fmt.Println()
-		return copyFileContents(dstPath+filepath.FromSlash("/"+path), path)
+		return CopyFile(dstPath+filepath.FromSlash("/"+path), path)
 	})
 }
 
-// CopyFile copies a file from src to dst. If src and dst files exist, and are
-// the same, then return success. Otherise, attempt to create a hard link
-// between the two files. If that fail, copy the file contents from src to dst.
 func CopyFile(dst, src string) (err error) {
 	sfi, err := os.Stat(src)
 	if err != nil {
@@ -63,24 +58,14 @@ func CopyFile(dst, src string) (err error) {
 			return
 		}
 	}
-	if err = os.Link(src, dst); err == nil {
-		return
-	}
 	fmt.Printf("Copying: %s -> %s", src, dst)
-	err = copyFileContents(dst, src)
+	fmt.Println()
+	err = copyFileContents(dst, src, sfi)
 	return
 }
 
-// copyFileContents copies the contents of the file named src to the file named
-// by dst. The file will be created if it does not already exist. If the
-// destination file exists, all it's contents will be replaced by the contents
-// of the source file.
-func copyFileContents(dst, src string) (err error) {
+func copyFileContents(dst, src string, stat os.FileInfo) (err error) {
 	in, err := os.Open(src)
-	if err != nil {
-		return
-	}
-	stat, err := in.Stat()
 	if err != nil {
 		return
 	}

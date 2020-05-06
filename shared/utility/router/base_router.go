@@ -11,8 +11,8 @@ type (
 )
 
 func getBaseRouter(context ctx.BackgroundContext) *httprouter.Router {
-	type routerContext struct{}
-	return context.Persist(routerContext{}, func() (interface{}, error) {
+	type c struct{}
+	return context.Persist(c{}, func() (interface{}, error) {
 		router := httprouter.New()
 
 		return router, nil

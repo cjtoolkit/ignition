@@ -1,0 +1,9 @@
+{{ define "content" }}
+    <h1>{{ .Title }}</h1>
+    {{ with .Local }}
+        {{ if not .ErrData.Production }}
+            <p>{{ .ErrData.Message }}</p>
+            <pre>{{ .ErrData.StackTrace }}</pre>
+        {{ end }}
+    {{ end }}
+{{ end }}

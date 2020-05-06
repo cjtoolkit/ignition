@@ -7,32 +7,69 @@ import (
 	"path/filepath"
 )
 
+type copyData struct {
+	dest string
+	src  string
+	info os.FileInfo
+}
+
 func CopyFolder(dst, src string) error {
 	wd, err := os.Getwd()
 	if err != nil {
 		return err
 	}
-	err = os.Chdir(wd + filepath.FromSlash("/"+src))
-	defer os.Chdir(wd)
+
+	err = os.Chdir(filepath.FromSlash(src))
 	if err != nil {
 		return err
 	}
-	dstPath := wd + filepath.FromSlash("/"+dst)
 
-	return filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+	err, data := walkDirectory(dst, src, err)
+	if err != nil {
+		return err
+	}
+
+	os.Chdir(wd)
+	err = os.Mkdir(dst, 0755)
+	if err != nil {
+		return err
+	}
+
+	for _, v := range data {
+		if v.info.IsDir() {
+			fmt.Printf("Creating: %s -> %s", v.src, v.dest)
+			fmt.Println()
+			err = os.Mkdir(v.dest, v.info.Mode())
+			if err != nil {
+				return err
+			}
+		}
+		err = CopyFile(v.dest, v.src)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func walkDirectory(dst string, src string, err error) (error, []copyData) {
+	data := []copyData{}
+
+	err = filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		if path == "." {
 			return nil
 		}
 		if err != nil {
 			return err
 		}
-		if info.IsDir() {
-			fmt.Printf("Creating: %s -> %s", path, dst+filepath.FromSlash("/"+path))
-			fmt.Println()
-			return os.Mkdir(dstPath+filepath.FromSlash("/"+path), info.Mode())
-		}
-		return CopyFile(dstPath+filepath.FromSlash("/"+path), path)
+		data = append(data, copyData{
+			dest: dst + filepath.FromSlash("/"+path),
+			src:  src + filepath.FromSlash("/"+path),
+			info: info,
+		})
+		return nil
 	})
+	return err, data
 }
 
 func CopyFile(dst, src string) (err error) {

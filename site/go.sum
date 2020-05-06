@@ -4,6 +4,8 @@ github.com/cjtoolkit/ctx v1.1.0/go.mod h1:y6HCczTZ82vY+sBkZ/WdpdVKQlWl7YHYEEbwVs
 github.com/cjtoolkit/ignition v0.0.0-20200506224143-8162128f5a41 h1:zRGwao48iSPFI+ZzRIfj3dacteYtDoK7noDi25zycvU=
 github.com/cjtoolkit/ignition/shared v0.0.0-20200506224143-8162128f5a41 h1:Mvr9C/+p+SF80txTulmlORPK05QNY6v0ICi+1kTGuko=
 github.com/cjtoolkit/ignition/shared v0.0.0-20200506224143-8162128f5a41/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200506230813-b894f2389b2a h1:NFE6k3yD2ttBMOZ+QYnlM8JbTkL7q/M9nMvA5sI9Gkk=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200506230813-b894f2389b2a/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
 github.com/cjtoolkit/taskforce v1.0.0/go.mod h1:kVToaaamTd3mklFcm6i3pDZybmSgC/YsKfWVquSMA8g=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

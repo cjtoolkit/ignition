@@ -1,7 +1,10 @@
 package router
 
 import (
+	"log"
 	"net/http"
+
+	"github.com/cjtoolkit/ignition/shared/utility/command/param"
 
 	"github.com/cjtoolkit/ctx"
 	"github.com/julienschmidt/httprouter"
@@ -36,10 +39,16 @@ func GetRouter(context ctx.BackgroundContext) Router {
 }
 
 type router struct {
-	router *httprouter.Router
+	router     *httprouter.Router
+	production bool
 }
 
-func initRouter(context ctx.BackgroundContext) *router { return &router{router: getBaseRouter(context)} }
+func initRouter(context ctx.BackgroundContext) *router {
+	return &router{
+		router:     getBaseRouter(context),
+		production: param.GetParam(context).Production,
+	}
+}
 
 func (r *router) DELETE(path string, handle Handle)  { r.Handle(http.MethodDelete, path, handle) }
 func (r *router) GET(path string, handle Handle)     { r.Handle(http.MethodGet, path, handle) }
@@ -68,6 +77,9 @@ func (r *router) HandlerFunc(method, path string, handler http.HandlerFunc) {
 func (r *router) ServeFiles(path string, root http.FileSystem) { r.router.ServeFiles(path, root) }
 
 func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	if !r.production {
+		log.Printf("HTTP: %q: %q", req.Method, req.URL.String())
+	}
 	req, _ = ctx.NewContext(w, req)
 	r.router.ServeHTTP(w, req)
 }

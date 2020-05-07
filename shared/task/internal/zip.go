@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func CreateZip(fileName, src string) error {
@@ -38,8 +39,9 @@ func CreateZip(fileName, src string) error {
 			continue
 		}
 		f, err := w.CreateHeader(&zip.FileHeader{
-			Name:   strings.Trim(strings.Trim(datum.src, "."), fmt.Sprintf("%c", filepath.Separator)),
-			Method: zip.Store,
+			Name:     strings.Trim(strings.Trim(datum.src, "."), fmt.Sprintf("%c", filepath.Separator)),
+			Method:   zip.Store,
+			Modified: time.Now(),
 		})
 		if err != nil {
 			return err

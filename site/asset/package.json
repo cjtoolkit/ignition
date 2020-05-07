@@ -1,0 +1,24 @@
+{
+  "name": "site",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@rollup/plugin-json": "^4.0.3",
+    "@rollup/plugin-replace": "^2.3.2",
+    "bootstrap": "^4.4.1",
+    "bootstrap.native": "https://github.com/thednp/bootstrap.native#9625a1423d863aeb7abb78e2e576c25dd46aaeee",
+    "node-sass": "^4.13.1",
+    "postcss": "^7.0.27",
+    "rollup": "^2.6.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.3.0"
+  },
+  "dependenciesMeta": {
+    "@fortawesome/fontawesome-free": {
+      "unplugged": true
+    },
+    "bootstrap": {
+      "unplugged": true
+    }
+  }
+}

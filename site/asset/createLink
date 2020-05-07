@@ -1,0 +1,9 @@
+#!/bin/bash
+cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )
+if [ -d "link" ]; then
+  rm -rf link
+fi
+mkdir link
+cd link
+ln -s ../.yarn/unplugged/@fortawesome-fontawesome-free-npm-*-*/node_modules/@fortawesome/fontawesome-free fontawesome
+ln -s ../.yarn/unplugged/bootstrap-virtual-*/node_modules/bootstrap bootstrap

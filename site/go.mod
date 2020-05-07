@@ -4,5 +4,5 @@ go 1.14
 
 require (
 	github.com/cjtoolkit/ctx v1.1.0
-	github.com/cjtoolkit/ignition/shared v0.0.0-20200507070939-37d930b46e14
+	github.com/cjtoolkit/ignition/shared v0.0.0-20200507071948-b189f92d586d
 )

@@ -3,7 +3,6 @@ package internal
 import (
 	"archive/tar"
 	"bytes"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -26,7 +25,6 @@ const (
 func BuildBase(dir, moduleName string) {
 	moduleNamePrefix := "module " + moduleName
 	dir = filepath.FromSlash(dir)
-	fmt.Println(dir)
 	err := os.Mkdir(dir, 0755)
 	if err != nil {
 		log.Fatal(err)

@@ -35,16 +35,16 @@ func CopyFolder(dst, src string) error {
 		return err
 	}
 
-	for _, v := range data {
-		if v.info.IsDir() {
-			fmt.Printf("Creating: %s -> %s", v.src, v.dest)
+	for _, datum := range data {
+		if datum.info.IsDir() {
+			fmt.Printf("Creating: %s -> %s", datum.src, datum.dest)
 			fmt.Println()
-			err = os.Mkdir(v.dest, v.info.Mode())
+			err = os.Mkdir(datum.dest, datum.info.Mode())
 			if err != nil {
 				return err
 			}
 		}
-		err = CopyFile(v.dest, v.src)
+		err = CopyFile(datum.dest, datum.src)
 		if err != nil {
 			return err
 		}

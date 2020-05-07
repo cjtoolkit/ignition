@@ -1,0 +1,13 @@
+{{ define "content" -}}
+    {{ with .Local }}
+        <h1>{{ .Message }} <i class="fas fa-globe-europe"></i></h1>
+    {{ end }}
+{{ end }}
+
+{{ define "javascript" }}
+    {{ with .Local }}
+        <script type="module">
+            console.log("{{ .Message }}")
+        </script>
+    {{ end }}
+{{ end }}

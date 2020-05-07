@@ -10,6 +10,7 @@ import (
 	"github.com/cjtoolkit/ignition/shared/utility/router"
 	"github.com/cjtoolkit/ignition/site/errorPage"
 	"github.com/cjtoolkit/ignition/site/fileServer"
+	"github.com/cjtoolkit/ignition/site/homePage"
 )
 
 func boot() (http.Handler, param.Param) {
@@ -20,6 +21,8 @@ func boot() (http.Handler, param.Param) {
 
 	errorPage.Boot(context)
 	fileServer.Boot(context)
+
+	homePage.Boot(context)
 
 	fmt.Println("Bootup up successfully.")
 	fmt.Println("")

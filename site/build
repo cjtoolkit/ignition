@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )
+GOOS=linux GOARCH=amd64 go build -v -o bin/build/site .
+asset/taskforce prod
+cat asset.zip >> bin/build/site

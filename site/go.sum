@@ -10,6 +10,8 @@ github.com/cjtoolkit/ignition/shared v0.0.0-20200506232257-c06e84eb10ea h1:Bsuoe
 github.com/cjtoolkit/ignition/shared v0.0.0-20200506232257-c06e84eb10ea/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
 github.com/cjtoolkit/ignition/shared v0.0.0-20200507063959-08bf79bf42ac h1:8NzYjNhAXKHvwc5XeEipjVnLbsjA+sI+fniGiJp7oWQ=
 github.com/cjtoolkit/ignition/shared v0.0.0-20200507063959-08bf79bf42ac/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200507070939-37d930b46e14 h1:oDv9Ob+Hz3lqpV2QiHieVFKNVdP6g75Px/EM0Z+wqXg=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200507070939-37d930b46e14/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
 github.com/cjtoolkit/taskforce v1.0.0 h1:I2k2YD7NZGavIJx/xo4DckN6RTIHyzNXvVQ2+VmUrYI=
 github.com/cjtoolkit/taskforce v1.0.0/go.mod h1:kVToaaamTd3mklFcm6i3pDZybmSgC/YsKfWVquSMA8g=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

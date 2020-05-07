@@ -21,6 +21,7 @@ _cgo_export.*
 _testmain.go
 
 *.exe
+/asset.zip
 
 .idea
 .glide

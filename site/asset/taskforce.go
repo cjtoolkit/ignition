@@ -11,7 +11,7 @@ import (
 func initTask() *taskforce.TaskForce {
 	var (
 		tf             = taskforce.InitTaskForce()
-		recoverSilent  = func() { recover() }
+		chdir          = task.Chdir(tf)
 		yarnRun        = task.YarnRun(tf)
 		devEnvironment = true
 	)
@@ -56,8 +56,9 @@ func initTask() *taskforce.TaskForce {
 	})
 
 	tf.Register("zip", func() {
+		defer chdir("live")()
 		zipUtil := task.Zip(tf)
-		zipUtil("../asset.zip", "live")
+		zipUtil("../../asset.zip", ".")
 	})
 
 	tf.Register("dev", func() {

@@ -34,6 +34,8 @@ func CreateZip(fileName, src string) error {
 
 	w := zip.NewWriter(out)
 
+	now := time.Now()
+
 	for _, datum := range data {
 		if datum.info.IsDir() {
 			continue
@@ -41,7 +43,7 @@ func CreateZip(fileName, src string) error {
 		f, err := w.CreateHeader(&zip.FileHeader{
 			Name:     strings.Trim(strings.Trim(datum.src, "."), fmt.Sprintf("%c", filepath.Separator)),
 			Method:   zip.Store,
-			Modified: time.Now(),
+			Modified: now,
 		})
 		if err != nil {
 			return err

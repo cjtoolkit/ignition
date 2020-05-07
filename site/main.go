@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/cjtoolkit/ignition/site/errorPage"
-
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/command/param"
 	"github.com/cjtoolkit/ignition/shared/utility/router"
+	"github.com/cjtoolkit/ignition/site/errorPage"
+	"github.com/cjtoolkit/ignition/site/fileServer"
 )
 
 func boot() (http.Handler, param.Param) {
@@ -19,6 +19,7 @@ func boot() (http.Handler, param.Param) {
 	_param := param.GetParam(context)
 
 	errorPage.Boot(context)
+	fileServer.Boot(context)
 
 	fmt.Println("Bootup up successfully.")
 	fmt.Println("")

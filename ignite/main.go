@@ -15,13 +15,13 @@ func main() {
 	switch os.Args[1] {
 	case "base":
 		if len(os.Args) < 4 {
-			log.Fatal("You must at least enter two more parameters")
+			log.Fatal("You must at least enter three parameters (dir, moduleName)")
 		}
 		internal.BuildBase(os.Args[2], os.Args[3])
 		return
 	case "app":
 		if len(os.Args) < 5 {
-			log.Fatal("You must at least enter three more parameters (dir, moduleName, baseModuleName)")
+			log.Fatal("You must at least enter four parameters (dir, moduleName, baseModuleName)")
 		}
 		internal.BuildApp(os.Args[2], os.Args[3], os.Args[4])
 		return

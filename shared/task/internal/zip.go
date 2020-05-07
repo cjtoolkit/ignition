@@ -2,18 +2,21 @@ package internal
 
 import (
 	"archive/zip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func CreateZip(fileName, src string) error {
+	src = filepath.FromSlash(src)
 	wd, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	err = os.Chdir(filepath.FromSlash(src))
+	err = os.Chdir(src)
 	if err != nil {
 		return err
 	}
@@ -35,7 +38,7 @@ func CreateZip(fileName, src string) error {
 			continue
 		}
 		f, err := w.CreateHeader(&zip.FileHeader{
-			Name:   datum.src,
+			Name:   strings.Trim(strings.Trim(datum.src, "."), fmt.Sprintf("%c", filepath.Separator)),
 			Method: zip.Store,
 		})
 		if err != nil {

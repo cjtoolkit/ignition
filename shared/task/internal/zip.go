@@ -52,6 +52,7 @@ func CreateZip(fileName, src string) error {
 		if err != nil {
 			return err
 		}
+		in.Close()
 	}
 
 	return w.Close()

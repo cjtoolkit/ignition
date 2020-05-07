@@ -35,10 +35,10 @@ func (m *MockFlashBag) EXPECT() *MockFlashBagMockRecorder {
 }
 
 // GetFlashBag mocks base method
-func (m *MockFlashBag) GetFlashBag(context ctx.Context) map[string]string {
+func (m *MockFlashBag) GetFlashBag(context ctx.Context) FlashBagValues {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFlashBag", context)
-	ret0, _ := ret[0].(map[string]string)
+	ret0, _ := ret[0].(FlashBagValues)
 	return ret0
 }
 

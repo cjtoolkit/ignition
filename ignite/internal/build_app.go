@@ -32,7 +32,6 @@ func BuildApp(dir, moduleName, baseModuleName string) {
 	var (
 		appDirPattern    = regexp.MustCompile(appDirPattern)
 		goPattern        = regexp.MustCompile(baseGoPattern)
-		goModPattern     = regexp.MustCompile(baseGoModPattern)
 		gitIgnorePattern = regexp.MustCompile(baseGitIgnorePattern)
 	)
 
@@ -67,10 +66,12 @@ func BuildApp(dir, moduleName, baseModuleName string) {
 			if goPattern.MatchString(hdr.Name) {
 				b = bytes.ReplaceAll(b, []byte(baseReplace), []byte("\""+baseModuleName))
 				b = bytes.ReplaceAll(b, []byte(appReplace), []byte("\""+moduleName))
-			} else if goModPattern.MatchString(hdr.Name) {
-				b = bytes.ReplaceAll(b, []byte(appReplaceModule), []byte(moduleNamePrefix))
+			} else if hdr.Name == appDir+"go.mod" {
+				b = bytes.Replace(b, []byte(appReplaceModule), []byte(moduleNamePrefix), 1)
 			} else if gitIgnorePattern.MatchString(hdr.Name) {
 				fileName = filepath.Dir(fileName) + filepath.FromSlash("/.gitignore")
+			} else if hdr.Name == appDir+"doTest" {
+				b = bytes.Replace(b, []byte(baseReplace[1:]), []byte(baseModuleName), 1)
 			}
 
 			// write a file

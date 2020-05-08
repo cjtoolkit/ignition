@@ -16,7 +16,6 @@ const (
 	baseDir              = "ignition-master/shared/"
 	baseDirPattern       = "^" + baseDir
 	baseGoPattern        = ".go$"
-	baseGoModPattern     = "go.mod$"
 	baseGitIgnorePattern = "gitignore.txt"
 	baseReplace          = "\"github.com/cjtoolkit/ignition/shared"
 	baseReplaceModule    = "module github.com/cjtoolkit/ignition/shared"
@@ -35,7 +34,6 @@ func BuildBase(dir, moduleName string) {
 	var (
 		dirPattern       = regexp.MustCompile(baseDirPattern)
 		goPattern        = regexp.MustCompile(baseGoPattern)
-		goModPattern     = regexp.MustCompile(baseGoModPattern)
 		gitIgnorePattern = regexp.MustCompile(baseGitIgnorePattern)
 	)
 
@@ -69,8 +67,8 @@ func BuildBase(dir, moduleName string) {
 
 			if goPattern.MatchString(hdr.Name) {
 				b = bytes.ReplaceAll(b, []byte(baseReplace), []byte("\""+moduleName))
-			} else if goModPattern.MatchString(hdr.Name) {
-				b = bytes.ReplaceAll(b, []byte(baseReplaceModule), []byte(moduleNamePrefix))
+			} else if hdr.Name == baseDir+"go.mod" {
+				b = bytes.Replace(b, []byte(baseReplaceModule), []byte(moduleNamePrefix), 1)
 			} else if gitIgnorePattern.MatchString(hdr.Name) {
 				fileName = filepath.Dir(fileName) + filepath.FromSlash("/.gitignore")
 			}

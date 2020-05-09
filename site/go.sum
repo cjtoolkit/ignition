@@ -9,6 +9,8 @@ github.com/cjtoolkit/ignition/shared v0.0.0-20200509075644-1d9807ab6c5e h1:Nfin0
 github.com/cjtoolkit/ignition/shared v0.0.0-20200509075644-1d9807ab6c5e/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
 github.com/cjtoolkit/ignition/shared v0.0.0-20200509080621-abc4287645f7 h1:ASIq3L+u+OiUwYFI4wsIw7APpjGLzsaO0Jpz61M+laA=
 github.com/cjtoolkit/ignition/shared v0.0.0-20200509080621-abc4287645f7/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200509083320-d6ec4c8830fe h1:0vBNq7BKVDgU3d8iLPgfb89eHnD85IDMbvyxcgxQ1/U=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200509083320-d6ec4c8830fe/go.mod h1:DyqDNo1ol8iMdAotZsjHkbDKnZgF5AiJRHJ1Zer35vQ=
 github.com/cjtoolkit/taskforce v1.0.0 h1:I2k2YD7NZGavIJx/xo4DckN6RTIHyzNXvVQ2+VmUrYI=
 github.com/cjtoolkit/taskforce v1.0.0/go.mod h1:kVToaaamTd3mklFcm6i3pDZybmSgC/YsKfWVquSMA8g=
 github.com/cjtoolkit/zipfs v1.0.0 h1:b567A+5gd6CINXrbiGkezXio6dwMTjOwXYCOuZmjQas=

@@ -49,7 +49,7 @@ func walkDirectory(dst string, src string) (error, []copyData) {
 	data := []copyData{}
 
 	prefixToTrim := src + filepath.FromSlash("/")
-	if prefixToTrim == "." {
+	if src == "." {
 		prefixToTrim = filepath.FromSlash("./")
 	}
 

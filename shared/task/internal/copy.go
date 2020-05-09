@@ -27,7 +27,7 @@ func CopyFolder(dst, src string) error {
 
 	for _, datum := range data {
 		if datum.info.IsDir() {
-			fmt.Printf("Creating: %s -> %s", datum.src, datum.dest)
+			fmt.Printf("Creating: %q -> %q", datum.src, datum.dest)
 			fmt.Println()
 			err := os.Mkdir(datum.dest, datum.info.Mode())
 			if err != nil {
@@ -97,7 +97,7 @@ func CopyFile(dst, src string) (err error) {
 			return
 		}
 	}
-	fmt.Printf("Copying: %s -> %s", src, dst)
+	fmt.Printf("Copying: %q -> %q", src, dst)
 	fmt.Println()
 	err = copyFileContents(dst, src, sfi)
 	return

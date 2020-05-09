@@ -2,6 +2,7 @@ package internal
 
 import (
 	"archive/zip"
+	"fmt"
 	"io"
 	"os"
 	"time"
@@ -13,6 +14,8 @@ func CreateZip(fileName, src string) error {
 		return err
 	}
 
+	fmt.Printf("Creating Zip: %q", fileName)
+	fmt.Println()
 	out, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	defer out.Close()
 
@@ -24,6 +27,8 @@ func CreateZip(fileName, src string) error {
 		if datum.info.IsDir() {
 			continue
 		}
+		fmt.Printf("Writing: %q -> %q", datum.src, datum.dest)
+		fmt.Println()
 		f, err := w.CreateHeader(&zip.FileHeader{
 			Name:     datum.dest,
 			Method:   zip.Store,

@@ -29,14 +29,15 @@ func CopyFolder(dst, src string) error {
 		if datum.info.IsDir() {
 			fmt.Printf("Creating: %s -> %s", datum.src, datum.dest)
 			fmt.Println()
-			err = os.Mkdir(datum.dest, datum.info.Mode())
+			err := os.Mkdir(datum.dest, datum.info.Mode())
 			if err != nil {
 				return err
 			}
-		}
-		err = CopyFile(datum.dest, datum.src)
-		if err != nil {
-			return err
+		} else {
+			err := CopyFile(datum.dest, datum.src)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -53,7 +54,7 @@ func walkDirectory(dst string, src string) (error, []copyData) {
 	}
 
 	err := filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
-		if path == "." {
+		if path == src {
 			return nil
 		}
 		if err != nil {

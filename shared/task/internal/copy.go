@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type copyData struct {
@@ -14,22 +15,11 @@ type copyData struct {
 }
 
 func CopyFolder(dst, src string) error {
-	wd, err := os.Getwd()
+	err, data := walkDirectory(dst, src)
 	if err != nil {
 		return err
 	}
 
-	err = os.Chdir(filepath.FromSlash(src))
-	if err != nil {
-		return err
-	}
-
-	err, data := walkDirectory(dst, src, err)
-	if err != nil {
-		return err
-	}
-
-	os.Chdir(wd)
 	err = os.Mkdir(dst, 0755)
 	if err != nil {
 		return err
@@ -52,19 +42,30 @@ func CopyFolder(dst, src string) error {
 	return nil
 }
 
-func walkDirectory(dst string, src string, err error) (error, []copyData) {
+func walkDirectory(dst string, src string) (error, []copyData) {
+	dst = filepath.FromSlash(dst)
+	src = filepath.FromSlash(src)
 	data := []copyData{}
 
-	err = filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+	prefixToTrim := src + filepath.FromSlash("/")
+	if prefixToTrim == "." {
+		prefixToTrim = filepath.FromSlash("./")
+	}
+
+	err := filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
 		if path == "." {
 			return nil
 		}
 		if err != nil {
 			return err
 		}
+		_dst := dst + filepath.FromSlash("/") + strings.TrimPrefix(path, prefixToTrim)
+		if dst == "" {
+			_dst = _dst[1:]
+		}
 		data = append(data, copyData{
-			dest: dst + filepath.FromSlash("/"+path),
-			src:  src + filepath.FromSlash("/"+path),
+			dest: _dst,
+			src:  path,
 			info: info,
 		})
 		return nil

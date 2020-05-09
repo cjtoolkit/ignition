@@ -27,16 +27,25 @@ func initTask() *taskforce.TaskForce {
 	})
 
 	{
-		// Sass
-		const (
-			dest = "live/stylesheets/styles.css"
-			src  = "dev/sass/styles.scss"
-		)
+		type sass struct {
+			dest string
+			src  string
+		}
+
+		destSrc := []sass{
+			{
+				dest: "live/stylesheets/styles.css",
+				src:  "dev/sass/styles.scss",
+			},
+		}
 
 		tf.Register("sass", func() {
-			args := []string{"--source-map", "true", "--source-map-contents", "true", "--precision", "8", "--output-style", "compressed"}
-			args = append(args, src, dest)
-			yarnRun("node-sass", args...)
+			args := []string{"--source-map", "true", "--source-map-contents", "true", "--precision", "8",
+				"--output-style", "compressed"}
+			for _, v := range destSrc {
+				args := append(args, v.src, v.dest)
+				yarnRun("node-sass", args...)
+			}
 		})
 	}
 

@@ -29,7 +29,7 @@ func BuildBase(dir, moduleName string) {
 		log.Fatal(err)
 	}
 
-	tr := getFileFromGitHub()
+	tr := getFile()
 
 	var (
 		dirPattern       = regexp.MustCompile(baseDirPattern)

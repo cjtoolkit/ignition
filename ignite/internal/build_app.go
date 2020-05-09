@@ -27,7 +27,7 @@ func BuildApp(dir, moduleName, baseModuleName string) {
 		log.Fatal(err)
 	}
 
-	tr := getFileFromGitHub()
+	tr := getFile()
 
 	var (
 		appDirPattern    = regexp.MustCompile(appDirPattern)

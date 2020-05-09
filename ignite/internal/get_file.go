@@ -18,16 +18,16 @@ const (
 	expires = 5 * time.Minute
 )
 
-func getFileFromGitHub() *tar.Reader {
+func getFile() *tar.Reader {
 	r, err := getFromCache()
 	if err == nil {
 		return r
 	}
 
-	return getFileByHttp()
+	return getFileFromGitHubByHttp()
 }
 
-func getFileByHttp() *tar.Reader {
+func getFileFromGitHubByHttp() *tar.Reader {
 	client := &http.Client{Timeout: 30 * time.Second}
 
 	res, err := client.Get(fileUrl)

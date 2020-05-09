@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/cjtoolkit/ctx v1.1.0
-	github.com/cjtoolkit/taskforce v1.0.0 // indirect
+	github.com/cjtoolkit/taskforce v1.0.0
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/golang/mock v1.4.3
 	github.com/gorilla/csrf v1.7.0

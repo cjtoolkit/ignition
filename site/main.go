@@ -13,6 +13,8 @@ import (
 	"github.com/cjtoolkit/ignition/site/homePage"
 )
 
+var build = "Undefined"
+
 func boot() (http.Handler, param.Param) {
 	context := ctx.NewBackgroundContext()
 	defer ctx.ClearBackgroundContext(context)
@@ -24,6 +26,8 @@ func boot() (http.Handler, param.Param) {
 
 	homePage.Boot(context)
 
+	fmt.Printf("Build: %q", build)
+	fmt.Println()
 	fmt.Println("Bootup up successfully.")
 	fmt.Println("")
 

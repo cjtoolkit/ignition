@@ -20,7 +20,7 @@ func CopyFolder(dst, src string) error {
 		return err
 	}
 
-	err = os.Mkdir(dst, 0755)
+	err = os.Mkdir(filepath.FromSlash(dst), 0755)
 	if err != nil {
 		return err
 	}

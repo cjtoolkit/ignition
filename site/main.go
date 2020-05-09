@@ -21,13 +21,14 @@ func boot() (http.Handler, param.Param) {
 
 	_param := param.GetParam(context)
 
+	fmt.Printf("Build: %q", build)
+	fmt.Println()
+
 	errorPage.Boot(context)
 	fileServer.Boot(context)
 
 	homePage.Boot(context)
 
-	fmt.Printf("Build: %q", build)
-	fmt.Println()
 	fmt.Println("Bootup up successfully.")
 	fmt.Println("")
 

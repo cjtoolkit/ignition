@@ -20,18 +20,33 @@ func CopyFolder(dst, src string) error {
 		return err
 	}
 
-	err = os.Mkdir(filepath.FromSlash(dst), 0755)
+	dst = filepath.FromSlash(dst)
+	exist, err := exists(dst)
 	if err != nil {
 		return err
+	}
+
+	if !exist {
+		err = os.Mkdir(filepath.FromSlash(dst), 0755)
+		if err != nil {
+			return err
+		}
 	}
 
 	for _, datum := range data {
 		if datum.info.IsDir() {
 			fmt.Printf("Creating: %q -> %q", datum.src, datum.dest)
 			fmt.Println()
-			err := os.Mkdir(datum.dest, datum.info.Mode())
+			exist, err := exists(datum.dest)
 			if err != nil {
 				return err
+			}
+
+			if !exist {
+				err := os.Mkdir(datum.dest, datum.info.Mode())
+				if err != nil {
+					return err
+				}
 			}
 		} else {
 			err := CopyFile(datum.dest, datum.src)
@@ -124,4 +139,15 @@ func copyFileContents(dst, src string, stat os.FileInfo) (err error) {
 	}
 	err = out.Sync()
 	return
+}
+
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return true, err
 }

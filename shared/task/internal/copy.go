@@ -27,7 +27,7 @@ func CopyFolder(dst, src string) error {
 	}
 
 	if !exist {
-		err = os.Mkdir(filepath.FromSlash(dst), 0755)
+		err = os.MkdirAll(filepath.FromSlash(dst), 0755)
 		if err != nil {
 			return err
 		}

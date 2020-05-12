@@ -29,7 +29,7 @@ func boot() (http.Handler, param.Param) {
 
 	homePage.Boot(context)
 
-	fmt.Println("Bootup up successfully.")
+	fmt.Println("Booted up successfully.")
 	fmt.Println("")
 
 	return router.GetRouter(context), _param

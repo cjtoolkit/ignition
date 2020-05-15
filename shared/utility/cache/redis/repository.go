@@ -18,6 +18,21 @@ const (
 	cachePrefixModified = constant.RedisCachePrefixModified
 )
 
+func GetSettings(context ctx.BackgroundContext) *Settings {
+	type c struct{}
+	return context.Persist(c{}, func() (interface{}, error) {
+		return &Settings{
+			CachePrefix:         cachePrefix,
+			CachePrefixModified: cachePrefixModified,
+		}, nil
+	}).(*Settings)
+}
+
+type Settings struct {
+	CachePrefix         string
+	CachePrefixModified string
+}
+
 type (
 	Miss func() (data interface{}, b []byte, err error)
 	Hit  func(b []byte) (data interface{}, err error)
@@ -31,6 +46,7 @@ func GetCacheRepository(context ctx.BackgroundContext) CacheRepository {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return CacheRepository(cacheRepostiory{
+			prefix:       GetSettings(context).CachePrefix,
 			redisCore:    GetRedisCore(context),
 			errorService: loggers.GetErrorService(context),
 		}), nil
@@ -38,12 +54,13 @@ func GetCacheRepository(context ctx.BackgroundContext) CacheRepository {
 }
 
 type cacheRepostiory struct {
+	prefix       string
 	redisCore    RedisCore
 	errorService loggers.ErrorService
 }
 
 func (r cacheRepostiory) Persist(name string, expiration time.Duration, miss Miss, hit Hit) interface{} {
-	name = fmt.Sprintf(cachePrefix, name)
+	name = fmt.Sprintf(r.prefix, name)
 
 	var (
 		data interface{}
@@ -71,6 +88,7 @@ func GetCacheModifiedRepository(context ctx.BackgroundContext) CacheModifiedRepo
 	type cacheModifiedRepositoryContext struct{}
 	return context.Persist(cacheModifiedRepositoryContext{}, func() (interface{}, error) {
 		return CacheModifiedRepository(cacheModifiedRepository{
+			prefix:          GetSettings(context).CachePrefixModified,
 			redisCore:       GetRedisCore(context),
 			cacheRepository: GetCacheRepository(context),
 			errorService:    loggers.GetErrorService(context),
@@ -79,13 +97,14 @@ func GetCacheModifiedRepository(context ctx.BackgroundContext) CacheModifiedRepo
 }
 
 type cacheModifiedRepository struct {
+	prefix          string
 	redisCore       RedisCore
 	cacheRepository CacheRepository
 	errorService    loggers.ErrorService
 }
 
 func (r cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss Miss, hit Hit) interface{} {
-	modifiedName := fmt.Sprintf(cachePrefixModified, name)
+	modifiedName := fmt.Sprintf(r.prefix, name)
 	modifiedTime := r.getModifiedTime(modifiedName, context)
 
 	data := r.cacheRepository.Persist(name, expiration, func() (data interface{}, b []byte, err error) {

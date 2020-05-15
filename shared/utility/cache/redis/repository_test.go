@@ -44,6 +44,7 @@ func TestCacheRepostiory(t *testing.T) {
 		}
 
 		subject := cacheRepostiory{
+			prefix:       cachePrefix,
 			redisCore:    mocks.redisCore,
 			errorService: mocks.errorService,
 		}
@@ -118,6 +119,7 @@ func TestCacheModifiedRepostiory(t *testing.T) {
 		}
 
 		subject := cacheModifiedRepository{
+			prefix:          cachePrefixModified,
 			redisCore:       mocks.redisCore,
 			cacheRepository: mocks.cacheRepostiory,
 			errorService:    mocks.errorService,

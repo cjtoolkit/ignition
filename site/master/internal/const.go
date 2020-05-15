@@ -3,6 +3,9 @@
 package internal
 
 const (
+	// Source: resources/Flashbag.html
+	Flashbag = `H4sIAAAAAAAC/7JJySxTSM5JLC62VUrMSS0qUaiu1nMG8Wtrleyqq/V8U4uLE9NTa2tt9FMyy+wA
+AQAA//93hMMQMAAAAA==`
 	// Source: resources/Master.html
 	Master = `H4sIAAAAAAAC/2xSPa/UMBDs8yuWpcWJEA2FHQk9XkEFxUOC0rH3XvzOH8Hey+kU5b+jXHJckC5N
 1rPjmdHI8t3X708vv388Q8/Bt5VcfuB1fFVIEReAtG0rAAAZiDWYXudCrPDEB/EZ96ueeRD05+RG

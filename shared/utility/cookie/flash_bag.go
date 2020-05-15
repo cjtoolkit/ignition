@@ -12,6 +12,17 @@ import (
 
 const flashBagSession = constant.FlashBagSession
 
+func GetFlashBagSetting(context ctx.BackgroundContext) *FlashBagSetting {
+	type c struct{}
+	return context.Persist(c{}, func() (interface{}, error) {
+		return &FlashBagSetting{FlashBagSession: flashBagSession}, nil
+	}).(*FlashBagSetting)
+}
+
+type FlashBagSetting struct {
+	FlashBagSession string
+}
+
 // FlashBagValues maps a string key to a list of values.
 type FlashBagValues map[string][]string
 
@@ -56,6 +67,7 @@ func GetFlashBag(context ctx.BackgroundContext) FlashBag {
 	type flashBagContext struct{}
 	return context.Persist(flashBagContext{}, func() (interface{}, error) {
 		return FlashBag(flashBag{
+			sessionName:  GetFlashBagSetting(context).FlashBagSession,
 			session:      GetSession(context),
 			errorService: loggers.GetErrorService(context),
 		}), nil
@@ -63,6 +75,7 @@ func GetFlashBag(context ctx.BackgroundContext) FlashBag {
 }
 
 type flashBag struct {
+	sessionName  string
 	session      Session
 	errorService loggers.ErrorService
 }
@@ -72,7 +85,7 @@ func (f flashBag) GetFlashBag(context ctx.Context) FlashBagValues {
 	return context.PersistData(flashBagContext{}, func() interface{} {
 		fB := FlashBagValues{}
 
-		b := f.session.GetDel(context, flashBagSession)
+		b := f.session.GetDel(context, f.sessionName)
 		_ = json.Unmarshal(b, &fB)
 
 		return fB
@@ -83,5 +96,5 @@ func (f flashBag) SaveFlashBagToSession(context ctx.Context) {
 	fB := f.GetFlashBag(context)
 	b, err := json.Marshal(fB)
 	f.errorService.CheckErrorAndPanic(err)
-	f.session.Set(context, flashBagSession, b)
+	f.session.Set(context, f.sessionName, b)
 }

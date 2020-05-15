@@ -5,10 +5,10 @@ import json from '@rollup/plugin-json';
 
 export default {
     input: {
-        'main': 'dev/javascripts/main.js',
+        'main': 'dev/javascript/main.js',
     },
     output: {
-        dir: 'live/javascripts',
+        dir: 'live/javascript',
         format: 'es',
         globals: [],
     },

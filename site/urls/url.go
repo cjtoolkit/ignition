@@ -3,7 +3,7 @@ package urls
 const (
 	Index = "/"
 
-	FontsFiles       = "/fonts/*filepath"
-	JavascriptsFiles = "/javascripts/*filepath"
-	StylesheetFiles  = "/stylesheets/*filepath"
+	FontsFiles      = "/fonts/*filepath"
+	JavascriptFiles = "/javascript/*filepath"
+	StylesheetFiles = "/stylesheets/*filepath"
 )

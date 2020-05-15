@@ -83,7 +83,7 @@ func initTask() *taskforce.TaskForce {
 	})
 
 	tf.Register("quick:js", func() {
-		os.RemoveAll(filepath.FromSlash("live/javascripts"))
+		os.RemoveAll(filepath.FromSlash("live/javascript"))
 		tf.Run("rollup")
 	})
 

@@ -26,6 +26,6 @@ func Boot(context ctx.BackgroundContext) {
 
 func serveFiles(r router.Router, fs http.FileSystem) {
 	r.ServeFiles(urls.FontsFiles, zipfs.Prefix("/fonts", fs))
-	r.ServeFiles(urls.JavascriptsFiles, zipfs.Prefix("/javascripts", fs))
+	r.ServeFiles(urls.JavascriptFiles, zipfs.Prefix("/javascript", fs))
 	r.ServeFiles(urls.StylesheetFiles, zipfs.Prefix("/stylesheets", fs))
 }

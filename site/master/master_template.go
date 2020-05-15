@@ -22,12 +22,8 @@ func getMasterTemplate(context ctx.BackgroundContext) *template.Template {
 func buildMasterTemplate(context ctx.BackgroundContext) *template.Template {
 	maps := template.FuncMap{}
 
-	// util.RegisterFlashBag(context, maps)
-
-	//{
-	//	csrfController := csrf.GetCsrfController(context)
-	//	maps["csrf"] = func(context ctx.Context) csrf.CsrfData { return csrfController.GetCsrfData(context) }
-	//}
+	//util.RegisterFlashBag(context, maps)
+	//util.RegisterCsrf(context, maps)
 
 	name, tpl := "Master", embedder.DecodeValue(internal.Master)
 	return template.Must(template.New(name).Funcs(maps).Parse(string(tpl)))

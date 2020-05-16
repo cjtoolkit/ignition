@@ -5,6 +5,8 @@ package cookie
 import (
 	"net/http"
 
+	"github.com/cjtoolkit/ignition/shared/utility/cookie/internal"
+
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
@@ -43,24 +45,12 @@ func (h cookieHelper) Set(context ctx.Context, cookie *http.Cookie) {
 
 func (h cookieHelper) Get(context ctx.Context, name string) *http.Cookie {
 	cookie, err := context.Request().Cookie(name)
-	if nil != err {
-		return nil
-	}
-
-	err = h.secureCookie.Decode(name, cookie.Value, &cookie.Value)
-	if nil != err {
-		return nil
-	}
-
-	return cookie
+	return internal.GetCookieDecodeAndErrorCheck(name, cookie, err, h.secureCookie)
 }
 
 func (h cookieHelper) GetValue(context ctx.Context, name string) string {
 	cookie := h.Get(context, name)
-	if cookie == nil {
-		return ""
-	}
-	return cookie.Value
+	return internal.GetCookieValue(cookie)
 }
 
 func (h cookieHelper) Delete(context ctx.Context, name string) {

@@ -1,3 +1,5 @@
+//go:generate gobox tools/easymock
+
 package view
 
 import (

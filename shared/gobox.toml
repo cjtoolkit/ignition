@@ -1,10 +1,10 @@
 [[module]]
-repo = "github.com/CJ-Jackson/generate"
-tag = "771002bf12d0281f0e06613a711303fb8642c7c0"
+repo = "github.com/cjtoolkit/ignition/generate"
+tag = "c0064d719d1437e77f395f851ca768207d5f3fff"
 binPath = "tools"
 installs = [
 	"debugflag",
-	"gmock"
+	"easymock"
 ]
 
 [[module]]

@@ -1,4 +1,4 @@
-//go:generate gobox tools/gmock
+//go:generate gobox tools/easymock
 
 package redis
 

@@ -49,7 +49,7 @@ type redisCore struct {
 
 func (r redisCore) GetBytes(key string) ([]byte, error) {
 	if !r.Exist(key) {
-		return nil, fmt.Errorf("Key %q is not found", key)
+		return nil, fmt.Errorf("key %q is not found", key)
 	}
 	var b []byte
 	err := r.radixPool.Do(radix.Cmd(&b, "GET", key))

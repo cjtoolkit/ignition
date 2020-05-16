@@ -18,6 +18,7 @@ type RedisCore interface {
 	SetBytes(key string, value []byte, expiration time.Duration)
 	Exist(key string) bool
 	Delete(keys ...string)
+	Cmd(rcv interface{}, cmd, key string, args ...interface{}) error
 }
 
 func GetRedisCore(context ctx.BackgroundContext) RedisCore {
@@ -74,4 +75,8 @@ func (r redisCore) Exist(key string) bool {
 
 func (r redisCore) Delete(keys ...string) {
 	_ = r.radixPool.Do(radix.Cmd(nil, "DEL", keys...))
+}
+
+func (r redisCore) Cmd(rcv interface{}, cmd, key string, args ...interface{}) error {
+	return r.radixPool.Do(radix.FlatCmd(rcv, cmd, key, args...))
 }

@@ -104,3 +104,22 @@ func (mr *MockRedisCoreMockRecorder) Delete(keys ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRedisCore)(nil).Delete), keys...)
 }
+
+// Cmd mocks base method
+func (m *MockRedisCore) Cmd(rcv interface{}, cmd, key string, args ...interface{}) error {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{rcv, cmd, key}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Cmd", varargs...)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Cmd indicates an expected call of Cmd
+func (mr *MockRedisCoreMockRecorder) Cmd(rcv, cmd, key interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{rcv, cmd, key}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Cmd", reflect.TypeOf((*MockRedisCore)(nil).Cmd), varargs...)
+}

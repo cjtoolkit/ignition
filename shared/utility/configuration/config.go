@@ -26,9 +26,7 @@ type Database struct {
 }
 
 type Redis struct {
-	Addr     string
-	Password string
-	DB       int
+	Addr string
 }
 
 func GetConfig(context ctx.BackgroundContext) Base {

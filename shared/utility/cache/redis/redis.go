@@ -8,7 +8,7 @@ import (
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
-	"github.com/go-redis/redis"
+	radix "github.com/mediocregopher/radix/v3"
 )
 
 type RedisCore interface {
@@ -22,32 +22,33 @@ type RedisCore interface {
 func GetRedisCore(context ctx.BackgroundContext) RedisCore {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return initRedisCore(context), nil
+		return initRedisCore(context)
 	}).(RedisCore)
 }
 
-func initRedisCore(context ctx.BackgroundContext) RedisCore {
+func initRedisCore(context ctx.BackgroundContext) (RedisCore, error) {
 	redisConfig := configuration.GetConfig(context).Database.Redis
 
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     redisConfig.Addr,
-		Password: redisConfig.Password,
-		DB:       redisConfig.DB,
-	})
+	radixPool, err := radix.NewPool("tcp", redisConfig.Addr, 10)
+	if err != nil {
+		return nil, err
+	}
 
 	return redisCore{
-		redisClient:  redisClient,
+		radixPool:    radixPool,
 		errorService: loggers.GetErrorService(context),
-	}
+	}, nil
 }
 
 type redisCore struct {
-	redisClient  *redis.Client
+	radixPool    *radix.Pool
 	errorService loggers.ErrorService
 }
 
 func (r redisCore) GetBytes(key string) ([]byte, error) {
-	return r.redisClient.Get(key).Bytes()
+	var b []byte
+	err := r.radixPool.Do(radix.Cmd(&b, "GET", key))
+	return b, err
 }
 
 func (r redisCore) MustGetBytes(key string) []byte {
@@ -58,13 +59,15 @@ func (r redisCore) MustGetBytes(key string) []byte {
 }
 
 func (r redisCore) SetBytes(key string, value []byte, expiration time.Duration) {
-	r.errorService.CheckErrorAndPanic(r.redisClient.Set(key, value, expiration).Err())
+	r.errorService.CheckErrorAndPanic(r.radixPool.Do(radix.FlatCmd(nil, "SET", key, value)))
 }
 
 func (r redisCore) Exist(key string) bool {
-	return r.redisClient.Exists(key).Val() > 0
+	var i int64
+	_ = r.radixPool.Do(radix.Cmd(&i, "EXISTS", key))
+	return i > 0
 }
 
 func (r redisCore) Delete(keys ...string) {
-	r.redisClient.Del(keys...)
+	_ = r.radixPool.Do(radix.Cmd(nil, "DEL", keys...))
 }

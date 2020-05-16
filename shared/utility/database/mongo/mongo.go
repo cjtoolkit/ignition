@@ -1,7 +1,7 @@
 package mongo
 
 import (
-	context2 "context"
+	goContext "context"
 
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
@@ -20,7 +20,7 @@ func GetMainMongo(context ctx.BackgroundContext) *mongo.Client {
 		if err != nil {
 			return c, err
 		}
-		err = c.Connect(context2.Background())
+		err = c.Connect(goContext.Background())
 		return c, err
 	}).(*mongo.Client)
 }

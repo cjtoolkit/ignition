@@ -77,7 +77,7 @@ func initCacheModifiedRepository(context ctx.BackgroundContext) cache.ModifiedRe
 
 func (c cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	modifiedName := fmt.Sprintf(name, c.prefix)
-	modifiedTime := c.getModifiedTime(modifiedName, context)
+	modifiedTime := c.getModifiedTime(modifiedName, expiration, context)
 
 	data := c.cacheRepository.Persist(name, expiration, func() (data interface{}, b []byte, err error) {
 		data, b, err = miss()
@@ -95,11 +95,14 @@ func (c cacheModifiedRepository) Persist(context ctx.Context, name string, expir
 	return data
 }
 
-func (c cacheModifiedRepository) getModifiedTime(name string, context ctx.Context) time.Time {
+func (c cacheModifiedRepository) getModifiedTime(name string, expiration time.Duration, context ctx.Context) time.Time {
 	var modifiedTime time.Time
 
 	stat, err := c.core.Stat(name)
 	if err != nil {
+		return modifiedTime
+	}
+	if time.Now().After(stat.ModTime().Add(expiration)) {
 		return modifiedTime
 	}
 	modifiedTime = stat.ModTime()

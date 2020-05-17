@@ -9,48 +9,24 @@ import (
 	"time"
 
 	"github.com/cjtoolkit/ctx"
-	"github.com/cjtoolkit/ignition/shared/constant"
+	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 )
-
-const (
-	cachePrefix         = constant.RedisCachePrefix
-	cachePrefixModified = constant.RedisCachePrefixModified
-)
-
-func GetSettings(context ctx.BackgroundContext) *Settings {
-	type c struct{}
-	return context.Persist(c{}, func() (interface{}, error) {
-		return &Settings{
-			CachePrefix:         cachePrefix,
-			CachePrefixModified: cachePrefixModified,
-		}, nil
-	}).(*Settings)
-}
-
-type Settings struct {
-	CachePrefix         string
-	CachePrefixModified string
-}
 
 type (
 	Miss func() (data interface{}, b []byte, err error)
 	Hit  func(b []byte) (data interface{}, err error)
 )
 
-type CacheRepository interface {
-	Persist(name string, expiration time.Duration, miss Miss, hit Hit) interface{}
-}
-
-func GetCacheRepository(context ctx.BackgroundContext) CacheRepository {
+func GetCacheRepository(context ctx.BackgroundContext) cache.CacheRepository {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return CacheRepository(cacheRepostiory{
-			prefix:       GetSettings(context).CachePrefix,
+		return cache.CacheRepository(cacheRepostiory{
+			prefix:       cache.GetSettings(context).CachePrefix,
 			redisCore:    GetRedisCore(context),
 			errorService: loggers.GetErrorService(context),
 		}), nil
-	}).(CacheRepository)
+	}).(cache.CacheRepository)
 }
 
 type cacheRepostiory struct {
@@ -59,7 +35,7 @@ type cacheRepostiory struct {
 	errorService loggers.ErrorService
 }
 
-func (r cacheRepostiory) Persist(name string, expiration time.Duration, miss Miss, hit Hit) interface{} {
+func (r cacheRepostiory) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	name = fmt.Sprintf(r.prefix, name)
 
 	var (
@@ -84,26 +60,26 @@ type CacheModifiedRepository interface {
 	Persist(context ctx.Context, name string, expiration time.Duration, miss Miss, hit Hit) interface{}
 }
 
-func GetCacheModifiedRepository(context ctx.BackgroundContext) CacheModifiedRepository {
+func GetCacheModifiedRepository(context ctx.BackgroundContext) cache.CacheModifiedRepository {
 	type cacheModifiedRepositoryContext struct{}
 	return context.Persist(cacheModifiedRepositoryContext{}, func() (interface{}, error) {
-		return CacheModifiedRepository(cacheModifiedRepository{
-			prefix:          GetSettings(context).CachePrefixModified,
+		return cache.CacheModifiedRepository(cacheModifiedRepository{
+			prefix:          cache.GetSettings(context).CachePrefixModified,
 			redisCore:       GetRedisCore(context),
 			cacheRepository: GetCacheRepository(context),
 			errorService:    loggers.GetErrorService(context),
 		}), nil
-	}).(CacheModifiedRepository)
+	}).(cache.CacheModifiedRepository)
 }
 
 type cacheModifiedRepository struct {
 	prefix          string
 	redisCore       RedisCore
-	cacheRepository CacheRepository
+	cacheRepository cache.CacheRepository
 	errorService    loggers.ErrorService
 }
 
-func (r cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss Miss, hit Hit) interface{} {
+func (r cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	modifiedName := fmt.Sprintf(r.prefix, name)
 	modifiedTime := r.getModifiedTime(modifiedName, context)
 

@@ -5,9 +5,9 @@ const (
 	ConfigDirectoryEnvVar  = "SITE_CONFIG_PATH"
 	DefaultConfigDirectory = "/etc/site/admin"
 
-	// Redis
-	RedisCachePrefix         = "prefix-%s"
-	RedisCachePrefixModified = "prefix-%s-modified"
+	// Cache
+	CachePrefix         = "prefix-%s"
+	CachePrefixModified = "prefix-%s-modified"
 
 	// Session
 	SessionCookie      = "session"

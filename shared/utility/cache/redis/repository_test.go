@@ -9,10 +9,17 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cjtoolkit/ignition/shared/constant"
+	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/cache/redis/internal"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
+)
+
+const (
+	cachePrefix         = constant.CachePrefix
+	cachePrefixModified = constant.CachePrefixModified
 )
 
 func TestCacheRepostiory(t *testing.T) {
@@ -21,8 +28,8 @@ func TestCacheRepostiory(t *testing.T) {
 		errorService *loggers.MockErrorService
 
 		hitMiss *internal.MockHitMiss
-		miss    Miss
-		hit     Hit
+		miss    cache.Miss
+		hit     cache.Hit
 	}
 
 	let := func(t *testing.T) (Mocks, cacheRepostiory) {
@@ -87,14 +94,14 @@ func TestCacheRepostiory(t *testing.T) {
 func TestCacheModifiedRepostiory(t *testing.T) {
 	type Mocks struct {
 		redisCore       *MockRedisCore
-		cacheRepostiory *MockCacheRepository
+		cacheRepostiory *cache.MockCacheRepository
 		errorService    *loggers.MockErrorService
 
 		context        *internal.MockContext
 		responseWriter *internal.MockResponseWriter
 		hitMiss        *internal.MockHitMiss
-		miss           Miss
-		hit            Hit
+		miss           cache.Miss
+		hit            cache.Hit
 	}
 
 	let := func(t *testing.T) (Mocks, cacheModifiedRepository) {
@@ -102,7 +109,7 @@ func TestCacheModifiedRepostiory(t *testing.T) {
 
 		mocks := Mocks{
 			redisCore:       NewMockRedisCore(ctrl),
-			cacheRepostiory: NewMockCacheRepository(ctrl),
+			cacheRepostiory: cache.NewMockCacheRepository(ctrl),
 			errorService:    loggers.NewMockErrorService(ctrl),
 
 			context:        internal.NewMockContext(ctrl),

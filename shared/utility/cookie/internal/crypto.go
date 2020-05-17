@@ -19,8 +19,7 @@ func Encrypt(keyStr string, value []byte) []byte {
 		panic(err)
 	}
 
-	cipherText := make([]byte, aes.BlockSize+len(value))
-	iv := cipherText[:aes.BlockSize]
+	iv := make([]byte, aes.BlockSize)
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		panic(err)
 	}
@@ -28,13 +27,14 @@ func Encrypt(keyStr string, value []byte) []byte {
 	stream := cipher.NewOFB(block, iv)
 
 	var out bytes.Buffer
+	(&out).Write(iv)
 
 	writer := &cipher.StreamWriter{S: stream, W: &out}
 	if _, err := io.Copy(writer, bReader); err != nil {
 		panic(err)
 	}
 
-	return append(iv, out.Bytes()...)
+	return out.Bytes()
 }
 
 func Decrypt(keyStr string, value []byte) []byte {

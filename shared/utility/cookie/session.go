@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/cjtoolkit/ctx"
@@ -13,6 +14,7 @@ import (
 	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/cache/defaultCache"
 	"github.com/cjtoolkit/ignition/shared/utility/coalesce"
+	"github.com/cjtoolkit/ignition/shared/utility/cookie/internal"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 )
 
@@ -69,11 +71,14 @@ func (s session) getSerial(context ctx.Context) string {
 			return s.cookie.GetValue(context, s.setting.SessionCookie)
 		},
 		func() string {
-			b := make([]byte, 32)
-			_, err := rand.Read(b)
+			key1 := make([]byte, 32)
+			_, err := rand.Read(key1)
+			s.errorService.CheckErrorAndPanic(err)
+			key2 := make([]byte, 32)
+			_, err = rand.Read(key2)
 			s.errorService.CheckErrorAndPanic(err)
 
-			return fmt.Sprintf("%x", b)
+			return fmt.Sprintf("%x,%x", key1, key2)
 		},
 	)
 }
@@ -83,6 +88,14 @@ func (s session) getSerialPersist(context ctx.Context) string {
 	return context.PersistData(serialContext{}, func() interface{} {
 		return s.getSerial(context)
 	}).(string)
+}
+
+func (s session) getSessionKey(context ctx.Context) string {
+	return strings.Split(s.getSerialPersist(context), ",")[0]
+}
+
+func (s session) getEncryptionKey(context ctx.Context) string {
+	return strings.Split(s.getSerialPersist(context), ",")[1]
 }
 
 func (s session) updateCookie(context ctx.Context) {
@@ -98,17 +111,19 @@ func (s session) formatName(serial, name string) string {
 }
 
 func (s session) Set(context ctx.Context, name string, value []byte) {
-	s.cache.SetBytes(s.formatName(s.getSerialPersist(context), name), value, 1*time.Hour)
+	s.cache.SetBytes(s.formatName(s.getSessionKey(context), name),
+		internal.Encrypt(s.getEncryptionKey(context), value), 1*time.Hour)
 	s.updateCookie(context)
 }
 
 func (s session) Get(context ctx.Context, name string) []byte {
-	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(s.getSerialPersist(context), name), 1*time.Hour)
+	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(s.getSessionKey(context), name), 1*time.Hour)
+	b = internal.Decrypt(s.getEncryptionKey(context), b)
 	return b
 }
 
 func (s session) Delete(context ctx.Context, name string) {
-	s.cache.Delete(s.formatName(s.getSerialPersist(context), name))
+	s.cache.Delete(s.formatName(s.getSessionKey(context), name))
 }
 
 func (s session) GetDel(context ctx.Context, name string) []byte {

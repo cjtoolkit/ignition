@@ -8,6 +8,6 @@ import (
 )
 
 func RegisterCsrf(context ctx.BackgroundContext, m template.FuncMap) {
-	_csrfControler := csrf.GetCsrfController(context)
-	m["csrf"] = func(context ctx.Context) csrf.CsrfData { return _csrfControler.GetCsrfData(context) }
+	_csrfControler := csrf.GetController(context)
+	m["csrf"] = func(context ctx.Context) csrf.Data { return _csrfControler.GetCsrfData(context) }
 }

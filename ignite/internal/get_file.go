@@ -108,7 +108,7 @@ func getFromCache() (*tar.Reader, error) {
 		return nil, err
 	}
 
-	if time.Now().Unix() > stat.ModTime().Add(expires).Unix() {
+	if time.Now().After(stat.ModTime().Add(expires)) {
 		return nil, fmt.Errorf("Expired")
 	}
 

@@ -20,7 +20,7 @@ func Encrypt(keyStr string, value []byte) []byte {
 	}
 
 	cipherText := make([]byte, aes.BlockSize+len(value))
-	iv := cipherText[aes.BlockSize:]
+	iv := cipherText[:aes.BlockSize]
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		panic(err)
 	}
@@ -34,7 +34,7 @@ func Encrypt(keyStr string, value []byte) []byte {
 		panic(err)
 	}
 
-	return out.Bytes()
+	return append(iv, out.Bytes()...)
 }
 
 func Decrypt(keyStr string, value []byte) []byte {

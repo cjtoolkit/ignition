@@ -11,31 +11,31 @@ import (
 	time "time"
 )
 
-// MockRedisCore is a mock of RedisCore interface
-type MockRedisCore struct {
+// MockCore is a mock of Core interface
+type MockCore struct {
 	ctrl     *gomock.Controller
-	recorder *MockRedisCoreMockRecorder
+	recorder *MockCoreMockRecorder
 }
 
-// MockRedisCoreMockRecorder is the mock recorder for MockRedisCore
-type MockRedisCoreMockRecorder struct {
-	mock *MockRedisCore
+// MockCoreMockRecorder is the mock recorder for MockCore
+type MockCoreMockRecorder struct {
+	mock *MockCore
 }
 
-// NewMockRedisCore creates a new mock instance
-func NewMockRedisCore(ctrl *gomock.Controller) *MockRedisCore {
-	mock := &MockRedisCore{ctrl: ctrl}
-	mock.recorder = &MockRedisCoreMockRecorder{mock}
+// NewMockCore creates a new mock instance
+func NewMockCore(ctrl *gomock.Controller) *MockCore {
+	mock := &MockCore{ctrl: ctrl}
+	mock.recorder = &MockCoreMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockRedisCore) EXPECT() *MockRedisCoreMockRecorder {
+func (m *MockCore) EXPECT() *MockCoreMockRecorder {
 	return m.recorder
 }
 
 // GetBytes mocks base method
-func (m *MockRedisCore) GetBytes(key string) ([]byte, error) {
+func (m *MockCore) GetBytes(key string) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBytes", key)
 	ret0, _ := ret[0].([]byte)
@@ -44,13 +44,13 @@ func (m *MockRedisCore) GetBytes(key string) ([]byte, error) {
 }
 
 // GetBytes indicates an expected call of GetBytes
-func (mr *MockRedisCoreMockRecorder) GetBytes(key interface{}) *gomock.Call {
+func (mr *MockCoreMockRecorder) GetBytes(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBytes", reflect.TypeOf((*MockRedisCore)(nil).GetBytes), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBytes", reflect.TypeOf((*MockCore)(nil).GetBytes), key)
 }
 
 // MustGetBytes mocks base method
-func (m *MockRedisCore) MustGetBytes(key string) []byte {
+func (m *MockCore) MustGetBytes(key string) []byte {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "MustGetBytes", key)
 	ret0, _ := ret[0].([]byte)
@@ -58,25 +58,25 @@ func (m *MockRedisCore) MustGetBytes(key string) []byte {
 }
 
 // MustGetBytes indicates an expected call of MustGetBytes
-func (mr *MockRedisCoreMockRecorder) MustGetBytes(key interface{}) *gomock.Call {
+func (mr *MockCoreMockRecorder) MustGetBytes(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MustGetBytes", reflect.TypeOf((*MockRedisCore)(nil).MustGetBytes), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MustGetBytes", reflect.TypeOf((*MockCore)(nil).MustGetBytes), key)
 }
 
 // SetBytes mocks base method
-func (m *MockRedisCore) SetBytes(key string, value []byte, expiration time.Duration) {
+func (m *MockCore) SetBytes(key string, value []byte, expiration time.Duration) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "SetBytes", key, value, expiration)
 }
 
 // SetBytes indicates an expected call of SetBytes
-func (mr *MockRedisCoreMockRecorder) SetBytes(key, value, expiration interface{}) *gomock.Call {
+func (mr *MockCoreMockRecorder) SetBytes(key, value, expiration interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBytes", reflect.TypeOf((*MockRedisCore)(nil).SetBytes), key, value, expiration)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBytes", reflect.TypeOf((*MockCore)(nil).SetBytes), key, value, expiration)
 }
 
 // Exist mocks base method
-func (m *MockRedisCore) Exist(key string) bool {
+func (m *MockCore) Exist(key string) bool {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Exist", key)
 	ret0, _ := ret[0].(bool)
@@ -84,13 +84,13 @@ func (m *MockRedisCore) Exist(key string) bool {
 }
 
 // Exist indicates an expected call of Exist
-func (mr *MockRedisCoreMockRecorder) Exist(key interface{}) *gomock.Call {
+func (mr *MockCoreMockRecorder) Exist(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exist", reflect.TypeOf((*MockRedisCore)(nil).Exist), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exist", reflect.TypeOf((*MockCore)(nil).Exist), key)
 }
 
 // Delete mocks base method
-func (m *MockRedisCore) Delete(keys ...string) {
+func (m *MockCore) Delete(keys ...string) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{}
 	for _, a := range keys {
@@ -100,13 +100,13 @@ func (m *MockRedisCore) Delete(keys ...string) {
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockRedisCoreMockRecorder) Delete(keys ...interface{}) *gomock.Call {
+func (mr *MockCoreMockRecorder) Delete(keys ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRedisCore)(nil).Delete), keys...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCore)(nil).Delete), keys...)
 }
 
 // Cmd mocks base method
-func (m *MockRedisCore) Cmd(rcv interface{}, cmd, key string, args ...interface{}) error {
+func (m *MockCore) Cmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{rcv, cmd, key}
 	for _, a := range args {
@@ -118,8 +118,8 @@ func (m *MockRedisCore) Cmd(rcv interface{}, cmd, key string, args ...interface{
 }
 
 // Cmd indicates an expected call of Cmd
-func (mr *MockRedisCoreMockRecorder) Cmd(rcv, cmd, key interface{}, args ...interface{}) *gomock.Call {
+func (mr *MockCoreMockRecorder) Cmd(rcv, cmd, key interface{}, args ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{rcv, cmd, key}, args...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Cmd", reflect.TypeOf((*MockRedisCore)(nil).Cmd), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Cmd", reflect.TypeOf((*MockCore)(nil).Cmd), varargs...)
 }

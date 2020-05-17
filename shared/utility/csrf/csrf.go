@@ -13,25 +13,25 @@ import (
 	"github.com/gorilla/csrf"
 )
 
-type CsrfData struct {
+type Data struct {
 	TokenField template.HTML
 	Token      string
 }
 
-type CsrfController interface {
-	GetCsrfData(context ctx.Context) CsrfData
+type Controller interface {
+	GetCsrfData(context ctx.Context) Data
 	InitCsrf(context ctx.Context)
 	CheckCsrf(context ctx.Context)
 }
 
-func GetCsrfController(context ctx.BackgroundContext) CsrfController {
+func GetController(context ctx.BackgroundContext) Controller {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return initCsrfController(context), nil
-	}).(CsrfController)
+	}).(Controller)
 }
 
-func initCsrfController(context ctx.BackgroundContext) CsrfController {
+func initCsrfController(context ctx.BackgroundContext) Controller {
 	return csrfController{
 		csrfProtect: csrf.Protect(
 			[]byte(configuration.GetConfig(context).CsrfKey),
@@ -47,18 +47,18 @@ type csrfController struct {
 	csrfProtect func(http.Handler) http.Handler
 }
 
-func (c csrfController) GetCsrfData(context ctx.Context) CsrfData {
+func (c csrfController) GetCsrfData(context ctx.Context) Data {
 	type csrfDataContext struct{}
 	return context.PersistData(csrfDataContext{}, func() interface{} {
 		return c.getCsrfData(context)
-	}).(CsrfData)
+	}).(Data)
 }
 
-func (c csrfController) getCsrfData(context ctx.Context) CsrfData {
-	var data CsrfData
+func (c csrfController) getCsrfData(context ctx.Context) Data {
+	var data Data
 
 	c.csrfProtect(http.HandlerFunc(func(_ http.ResponseWriter, req *http.Request) {
-		data = CsrfData{
+		data = Data{
 			TokenField: csrf.TemplateField(req),
 			Token:      csrf.Token(req),
 		}

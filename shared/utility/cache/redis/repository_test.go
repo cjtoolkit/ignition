@@ -24,7 +24,7 @@ const (
 
 func TestCacheRepostiory(t *testing.T) {
 	type Mocks struct {
-		redisCore    *MockRedisCore
+		redisCore    *MockCore
 		errorService *loggers.MockErrorService
 
 		hitMiss *internal.MockHitMiss
@@ -32,11 +32,11 @@ func TestCacheRepostiory(t *testing.T) {
 		hit     cache.Hit
 	}
 
-	let := func(t *testing.T) (Mocks, cacheRepostiory) {
+	let := func(t *testing.T) (Mocks, cacheRepository) {
 		ctrl := gomock.NewController(t)
 
 		mocks := Mocks{
-			redisCore:    NewMockRedisCore(ctrl),
+			redisCore:    NewMockCore(ctrl),
 			errorService: loggers.NewMockErrorService(ctrl),
 
 			hitMiss: internal.NewMockHitMiss(ctrl),
@@ -50,7 +50,7 @@ func TestCacheRepostiory(t *testing.T) {
 			return
 		}
 
-		subject := cacheRepostiory{
+		subject := cacheRepository{
 			prefix:       cachePrefix,
 			redisCore:    mocks.redisCore,
 			errorService: mocks.errorService,
@@ -93,7 +93,7 @@ func TestCacheRepostiory(t *testing.T) {
 
 func TestCacheModifiedRepostiory(t *testing.T) {
 	type Mocks struct {
-		redisCore       *MockRedisCore
+		redisCore       *MockCore
 		cacheRepostiory *cache.MockCacheRepository
 		errorService    *loggers.MockErrorService
 
@@ -108,7 +108,7 @@ func TestCacheModifiedRepostiory(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mocks := Mocks{
-			redisCore:       NewMockRedisCore(ctrl),
+			redisCore:       NewMockCore(ctrl),
 			cacheRepostiory: cache.NewMockCacheRepository(ctrl),
 			errorService:    loggers.NewMockErrorService(ctrl),
 

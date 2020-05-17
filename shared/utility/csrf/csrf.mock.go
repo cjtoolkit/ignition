@@ -6,12 +6,13 @@
 package csrf
 
 import (
+	reflect "reflect"
+
 	ctx "github.com/cjtoolkit/ctx"
 	gomock "github.com/golang/mock/gomock"
-	reflect "reflect"
 )
 
-// MockCsrfController is a mock of CsrfController interface
+// MockCsrfController is a mock of Controller interface
 type MockCsrfController struct {
 	ctrl     *gomock.Controller
 	recorder *MockCsrfControllerMockRecorder
@@ -35,10 +36,10 @@ func (m *MockCsrfController) EXPECT() *MockCsrfControllerMockRecorder {
 }
 
 // GetCsrfData mocks base method
-func (m *MockCsrfController) GetCsrfData(context ctx.Context) CsrfData {
+func (m *MockCsrfController) GetCsrfData(context ctx.Context) Data {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCsrfData", context)
-	ret0, _ := ret[0].(CsrfData)
+	ret0, _ := ret[0].(Data)
 	return ret0
 }
 

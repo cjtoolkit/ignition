@@ -1,5 +1,3 @@
-//go:generate gobox tools/easymock
-
 package redis
 
 import (
@@ -18,24 +16,24 @@ type (
 	Hit  func(b []byte) (data interface{}, err error)
 )
 
-func GetCacheRepository(context ctx.BackgroundContext) cache.CacheRepository {
+func GetCacheRepository(context ctx.BackgroundContext) cache.Repository {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return cache.CacheRepository(cacheRepostiory{
+		return cache.Repository(cacheRepository{
 			prefix:       cache.GetSettings(context).CachePrefix,
-			redisCore:    GetRedisCore(context),
+			redisCore:    GetCore(context),
 			errorService: loggers.GetErrorService(context),
 		}), nil
-	}).(cache.CacheRepository)
+	}).(cache.Repository)
 }
 
-type cacheRepostiory struct {
+type cacheRepository struct {
 	prefix       string
-	redisCore    RedisCore
+	redisCore    Core
 	errorService loggers.ErrorService
 }
 
-func (r cacheRepostiory) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
+func (r cacheRepository) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	name = fmt.Sprintf(r.prefix, name)
 
 	var (
@@ -56,26 +54,22 @@ func (r cacheRepostiory) Persist(name string, expiration time.Duration, miss cac
 	return data
 }
 
-type CacheModifiedRepository interface {
-	Persist(context ctx.Context, name string, expiration time.Duration, miss Miss, hit Hit) interface{}
-}
-
-func GetCacheModifiedRepository(context ctx.BackgroundContext) cache.CacheModifiedRepository {
+func GetCacheModifiedRepository(context ctx.BackgroundContext) cache.ModifiedRepository {
 	type cacheModifiedRepositoryContext struct{}
 	return context.Persist(cacheModifiedRepositoryContext{}, func() (interface{}, error) {
-		return cache.CacheModifiedRepository(cacheModifiedRepository{
+		return cache.ModifiedRepository(cacheModifiedRepository{
 			prefix:          cache.GetSettings(context).CachePrefixModified,
-			redisCore:       GetRedisCore(context),
+			redisCore:       GetCore(context),
 			cacheRepository: GetCacheRepository(context),
 			errorService:    loggers.GetErrorService(context),
 		}), nil
-	}).(cache.CacheModifiedRepository)
+	}).(cache.ModifiedRepository)
 }
 
 type cacheModifiedRepository struct {
 	prefix          string
-	redisCore       RedisCore
-	cacheRepository cache.CacheRepository
+	redisCore       Core
+	cacheRepository cache.Repository
 	errorService    loggers.ErrorService
 }
 

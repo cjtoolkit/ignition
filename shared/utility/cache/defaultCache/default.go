@@ -7,11 +7,13 @@ import (
 )
 
 type (
-	CacheRepositoryFn         func(context ctx.BackgroundContext) cache.CacheRepository
-	CacheModifiedRepositoryFn func(context ctx.BackgroundContext) cache.CacheModifiedRepository
+	CacheCoreFn               func(context ctx.BackgroundContext) cache.Core
+	CacheRepositoryFn         func(context ctx.BackgroundContext) cache.Repository
+	CacheModifiedRepositoryFn func(context ctx.BackgroundContext) cache.ModifiedRepository
 )
 
 type defaultCache struct {
+	cacheCore               CacheCoreFn
 	cacheRepository         CacheRepositoryFn
 	cacheModifiedRepository CacheModifiedRepositoryFn
 }
@@ -20,10 +22,17 @@ func getDefaultCache(context ctx.BackgroundContext) *defaultCache {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return &defaultCache{
+			cacheCore: func(context ctx.BackgroundContext) cache.Core {
+				return redis.GetCore(context)
+			},
 			cacheRepository:         redis.GetCacheRepository,
 			cacheModifiedRepository: redis.GetCacheModifiedRepository,
 		}, nil
 	}).(*defaultCache)
+}
+
+func SetCacheCore(context ctx.BackgroundContext, cacheCore CacheCoreFn) {
+	getDefaultCache(context).cacheCore = cacheCore
 }
 
 func SetCacheRepository(context ctx.BackgroundContext, cacheRepository CacheRepositoryFn) {
@@ -34,10 +43,14 @@ func SetCacheModifiedRepository(context ctx.BackgroundContext, cacheModifiedRepo
 	getDefaultCache(context).cacheModifiedRepository = cacheModifiedRepository
 }
 
-func CacheRepository(context ctx.BackgroundContext) cache.CacheRepository {
+func CacheCore(context ctx.BackgroundContext) cache.Core {
+	return getDefaultCache(context).cacheCore(context)
+}
+
+func CacheRepository(context ctx.BackgroundContext) cache.Repository {
 	return getDefaultCache(context).cacheRepository(context)
 }
 
-func CacheModifiedRepository(context ctx.BackgroundContext) cache.CacheModifiedRepository {
+func CacheModifiedRepository(context ctx.BackgroundContext) cache.ModifiedRepository {
 	return getDefaultCache(context).cacheModifiedRepository(context)
 }

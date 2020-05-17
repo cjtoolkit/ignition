@@ -12,6 +12,209 @@ import (
 	time "time"
 )
 
+// MockCacheCore is a mock of CacheCore interface
+type MockCacheCore struct {
+	ctrl     *gomock.Controller
+	recorder *MockCacheCoreMockRecorder
+}
+
+// MockCacheCoreMockRecorder is the mock recorder for MockCacheCore
+type MockCacheCoreMockRecorder struct {
+	mock *MockCacheCore
+}
+
+// NewMockCacheCore creates a new mock instance
+func NewMockCacheCore(ctrl *gomock.Controller) *MockCacheCore {
+	mock := &MockCacheCore{ctrl: ctrl}
+	mock.recorder = &MockCacheCoreMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockCacheCore) EXPECT() *MockCacheCoreMockRecorder {
+	return m.recorder
+}
+
+// GetBytes mocks base method
+func (m *MockCacheCore) GetBytes(key string) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBytes", key)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBytes indicates an expected call of GetBytes
+func (mr *MockCacheCoreMockRecorder) GetBytes(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBytes", reflect.TypeOf((*MockCacheCore)(nil).GetBytes), key)
+}
+
+// MustGetBytes mocks base method
+func (m *MockCacheCore) MustGetBytes(key string) []byte {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MustGetBytes", key)
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
+
+// MustGetBytes indicates an expected call of MustGetBytes
+func (mr *MockCacheCoreMockRecorder) MustGetBytes(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MustGetBytes", reflect.TypeOf((*MockCacheCore)(nil).MustGetBytes), key)
+}
+
+// SetBytes mocks base method
+func (m *MockCacheCore) SetBytes(key string, value []byte, expiration time.Duration) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetBytes", key, value, expiration)
+}
+
+// SetBytes indicates an expected call of SetBytes
+func (mr *MockCacheCoreMockRecorder) SetBytes(key, value, expiration interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBytes", reflect.TypeOf((*MockCacheCore)(nil).SetBytes), key, value, expiration)
+}
+
+// Exist mocks base method
+func (m *MockCacheCore) Exist(key string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Exist", key)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// Exist indicates an expected call of Exist
+func (mr *MockCacheCoreMockRecorder) Exist(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exist", reflect.TypeOf((*MockCacheCore)(nil).Exist), key)
+}
+
+// Delete mocks base method
+func (m *MockCacheCore) Delete(keys ...string) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{}
+	for _, a := range keys {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "Delete", varargs...)
+}
+
+// Delete indicates an expected call of Delete
+func (mr *MockCacheCoreMockRecorder) Delete(keys ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCacheCore)(nil).Delete), keys...)
+}
+
+// MockCacheCoreGetCheck is a mock of CacheCoreGetCheck interface
+type MockCacheCoreGetCheck struct {
+	ctrl     *gomock.Controller
+	recorder *MockCacheCoreGetCheckMockRecorder
+}
+
+// MockCacheCoreGetCheckMockRecorder is the mock recorder for MockCacheCoreGetCheck
+type MockCacheCoreGetCheckMockRecorder struct {
+	mock *MockCacheCoreGetCheck
+}
+
+// NewMockCacheCoreGetCheck creates a new mock instance
+func NewMockCacheCoreGetCheck(ctrl *gomock.Controller) *MockCacheCoreGetCheck {
+	mock := &MockCacheCoreGetCheck{ctrl: ctrl}
+	mock.recorder = &MockCacheCoreGetCheckMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockCacheCoreGetCheck) EXPECT() *MockCacheCoreGetCheckMockRecorder {
+	return m.recorder
+}
+
+// GetBytes mocks base method
+func (m *MockCacheCoreGetCheck) GetBytes(key string) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBytes", key)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBytes indicates an expected call of GetBytes
+func (mr *MockCacheCoreGetCheckMockRecorder) GetBytes(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBytes", reflect.TypeOf((*MockCacheCoreGetCheck)(nil).GetBytes), key)
+}
+
+// MustGetBytes mocks base method
+func (m *MockCacheCoreGetCheck) MustGetBytes(key string) []byte {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MustGetBytes", key)
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
+
+// MustGetBytes indicates an expected call of MustGetBytes
+func (mr *MockCacheCoreGetCheckMockRecorder) MustGetBytes(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MustGetBytes", reflect.TypeOf((*MockCacheCoreGetCheck)(nil).MustGetBytes), key)
+}
+
+// SetBytes mocks base method
+func (m *MockCacheCoreGetCheck) SetBytes(key string, value []byte, expiration time.Duration) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetBytes", key, value, expiration)
+}
+
+// SetBytes indicates an expected call of SetBytes
+func (mr *MockCacheCoreGetCheckMockRecorder) SetBytes(key, value, expiration interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBytes", reflect.TypeOf((*MockCacheCoreGetCheck)(nil).SetBytes), key, value, expiration)
+}
+
+// Exist mocks base method
+func (m *MockCacheCoreGetCheck) Exist(key string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Exist", key)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// Exist indicates an expected call of Exist
+func (mr *MockCacheCoreGetCheckMockRecorder) Exist(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exist", reflect.TypeOf((*MockCacheCoreGetCheck)(nil).Exist), key)
+}
+
+// Delete mocks base method
+func (m *MockCacheCoreGetCheck) Delete(keys ...string) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{}
+	for _, a := range keys {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "Delete", varargs...)
+}
+
+// Delete indicates an expected call of Delete
+func (mr *MockCacheCoreGetCheckMockRecorder) Delete(keys ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCacheCoreGetCheck)(nil).Delete), keys...)
+}
+
+// GetBytesCheck mocks base method
+func (m *MockCacheCoreGetCheck) GetBytesCheck(key string, expiration time.Duration) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBytesCheck", key, expiration)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBytesCheck indicates an expected call of GetBytesCheck
+func (mr *MockCacheCoreGetCheckMockRecorder) GetBytesCheck(key, expiration interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBytesCheck", reflect.TypeOf((*MockCacheCoreGetCheck)(nil).GetBytesCheck), key, expiration)
+}
+
 // MockCacheRepository is a mock of CacheRepository interface
 type MockCacheRepository struct {
 	ctrl     *gomock.Controller

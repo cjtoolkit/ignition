@@ -30,7 +30,7 @@ func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
 		return HmacUtil(hmacUtil{
 			key:          []byte(configuration.GetConfig(context).HmacKey),
 			errorService: loggers.GetErrorService(context),
-			hasher:       GetHasher(context),
+			hash:         GetHasher(context),
 		}), nil
 	}).(HmacUtil)
 }
@@ -38,13 +38,13 @@ func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
 type hmacUtil struct {
 	key          []byte
 	errorService loggers.ErrorService
-	hasher       Hasher
+	hash         Hash
 }
 
 func (u hmacUtil) Sign(context ctx.Context, message string) string {
 	data := hmacData{
 		Message: message,
-		Hash:    hmacSum(message, u.hasher.Sum(context), u.key),
+		Hash:    hmacSum(message, u.hash.Sum(context), u.key),
 	}
 
 	b, err := json.Marshal(data)
@@ -61,7 +61,7 @@ func (u hmacUtil) Check(context ctx.Context, message string) string {
 	err = json.Unmarshal(b, &data)
 	checkErrorAndForbid(err)
 
-	checkBoolAndForbid(hmac.Equal(data.Hash, hmacSum(data.Message, u.hasher.Sum(context), u.key)))
+	checkBoolAndForbid(hmac.Equal(data.Hash, hmacSum(data.Message, u.hash.Sum(context), u.key)))
 
 	return data.Message
 }

@@ -7,28 +7,25 @@ import (
 	"time"
 
 	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	radix "github.com/mediocregopher/radix/v3"
 )
 
-type RedisCore interface {
-	GetBytes(key string) ([]byte, error)
-	MustGetBytes(key string) []byte
-	SetBytes(key string, value []byte, expiration time.Duration)
-	Exist(key string) bool
-	Delete(keys ...string)
+type Core interface {
+	cache.Core
 	Cmd(rcv interface{}, cmd, key string, args ...interface{}) error
 }
 
-func GetRedisCore(context ctx.BackgroundContext) RedisCore {
+func GetCore(context ctx.BackgroundContext) Core {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return initRedisCore(context)
-	}).(RedisCore)
+	}).(Core)
 }
 
-func initRedisCore(context ctx.BackgroundContext) (RedisCore, error) {
+func initRedisCore(context ctx.BackgroundContext) (Core, error) {
 	redisConfig := configuration.GetConfig(context).Database.Redis
 
 	radixPool, err := radix.NewPool("tcp", redisConfig.Addr, 10)

@@ -8,9 +8,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cjtoolkit/ignition/shared/utility/cache/defaultCache"
+
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/constant"
-	"github.com/cjtoolkit/ignition/shared/utility/cache/redis"
+	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/coalesce"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 )
@@ -48,7 +50,7 @@ func GetSession(context ctx.BackgroundContext) Session {
 	return context.Persist(c{}, func() (interface{}, error) {
 		return Session(session{
 			setting:      *GetSessionSettings(context),
-			redisCore:    redis.GetRedisCore(context),
+			cache:        defaultCache.CacheCore(context),
 			cookie:       GetCookieHelper(context),
 			errorService: loggers.GetErrorService(context),
 		}), nil
@@ -57,8 +59,8 @@ func GetSession(context ctx.BackgroundContext) Session {
 
 type session struct {
 	setting      SessionSettings
-	redisCore    redis.RedisCore
-	cookie       CookieHelper
+	cache        cache.Core
+	cookie       Helper
 	errorService loggers.ErrorService
 }
 
@@ -97,17 +99,17 @@ func (s session) formatName(serial, name string) string {
 }
 
 func (s session) Set(context ctx.Context, name string, value []byte) {
-	s.redisCore.SetBytes(s.formatName(s.getSerialPersist(context), name), value, 1*time.Hour)
+	s.cache.SetBytes(s.formatName(s.getSerialPersist(context), name), value, 1*time.Hour)
 	s.updateCookie(context)
 }
 
 func (s session) Get(context ctx.Context, name string) []byte {
-	b, _ := s.redisCore.GetBytes(s.formatName(s.getSerialPersist(context), name))
+	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(s.getSerialPersist(context), name), 1*time.Hour)
 	return b
 }
 
 func (s session) Delete(context ctx.Context, name string) {
-	s.redisCore.Delete(s.formatName(s.getSerialPersist(context), name))
+	s.cache.Delete(s.formatName(s.getSerialPersist(context), name))
 }
 
 func (s session) GetDel(context ctx.Context, name string) []byte {

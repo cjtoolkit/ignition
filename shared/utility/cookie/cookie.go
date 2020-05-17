@@ -13,21 +13,21 @@ import (
 	"github.com/gorilla/securecookie"
 )
 
-type CookieHelper interface {
+type Helper interface {
 	Set(context ctx.Context, cookie *http.Cookie)
 	Get(context ctx.Context, name string) *http.Cookie
 	Delete(context ctx.Context, name string)
 	GetValue(context ctx.Context, name string) string
 }
 
-func GetCookieHelper(context ctx.BackgroundContext) CookieHelper {
+func GetCookieHelper(context ctx.BackgroundContext) Helper {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return CookieHelper(cookieHelper{
+		return Helper(cookieHelper{
 			secureCookie: securecookie.New([]byte(configuration.GetConfig(context).CookieKey), nil),
 			errorService: loggers.GetErrorService(context),
 		}), nil
-	}).(CookieHelper)
+	}).(Helper)
 }
 
 type cookieHelper struct {

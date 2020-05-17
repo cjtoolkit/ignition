@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetMainMongo(context ctx.BackgroundContext) *mongo.Client {
+func GetMain(context ctx.BackgroundContext) *mongo.Client {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		mongoDial := configuration.GetConfig(context).Database.MongoDial
@@ -25,19 +25,19 @@ func GetMainMongo(context ctx.BackgroundContext) *mongo.Client {
 	}).(*mongo.Client)
 }
 
-func GetMainMongoDatabase(context ctx.BackgroundContext) *mongo.Database {
+func GetMainDatabase(context ctx.BackgroundContext) *mongo.Database {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		mongoDb := configuration.GetConfig(context).Database.MongoDb
 
-		return GetMainMongo(context).Database(mongoDb), nil
+		return GetMain(context).Database(mongoDb), nil
 	}).(*mongo.Database)
 }
 
-func GetMainMongoGridFs(context ctx.BackgroundContext) *gridfs.Bucket {
+func GetMainGridFs(context ctx.BackgroundContext) *gridfs.Bucket {
 	type mainMongoGridFs struct{}
 	return context.Persist(mainMongoGridFs{}, func() (interface{}, error) {
-		return gridfs.NewBucket(GetMainMongoDatabase(context))
+		return gridfs.NewBucket(GetMainDatabase(context))
 	}).(*gridfs.Bucket)
 }
 

@@ -62,7 +62,7 @@ func (r redisCore) MustGetBytes(key string) []byte {
 
 func (r redisCore) SetBytes(key string, value []byte, expiration time.Duration) {
 	r.errorService.CheckErrorAndPanic(r.radixPool.Do(radix.FlatCmd(nil, "SET", key, value,
-		fmt.Sprintf("EX %d", int64(expiration.Seconds())),
+		"EX", int64(expiration.Seconds()),
 	)))
 }
 

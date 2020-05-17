@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"encoding/hex"
 	"io"
 )
@@ -18,8 +19,13 @@ func Encrypt(keyStr string, value []byte) []byte {
 		panic(err)
 	}
 
-	var iv [aes.BlockSize]byte
-	stream := cipher.NewOFB(block, iv[:])
+	cipherText := make([]byte, aes.BlockSize+len(value))
+	iv := cipherText[aes.BlockSize:]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+
+	stream := cipher.NewOFB(block, iv)
 
 	var out bytes.Buffer
 
@@ -34,6 +40,13 @@ func Encrypt(keyStr string, value []byte) []byte {
 func Decrypt(keyStr string, value []byte) []byte {
 	key, _ := hex.DecodeString(keyStr)
 
+	if len(value) < aes.BlockSize {
+		panic("ciphertext too short")
+	}
+
+	iv := value[:aes.BlockSize]
+	value = value[aes.BlockSize:]
+
 	bReader := bytes.NewReader(value)
 
 	block, err := aes.NewCipher(key)
@@ -41,8 +54,7 @@ func Decrypt(keyStr string, value []byte) []byte {
 		panic(err)
 	}
 
-	var iv [aes.BlockSize]byte
-	stream := cipher.NewOFB(block, iv[:])
+	stream := cipher.NewOFB(block, iv)
 
 	var out bytes.Buffer
 

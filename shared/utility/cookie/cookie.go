@@ -20,7 +20,7 @@ type Helper interface {
 	GetValue(context ctx.Context, name string) string
 }
 
-func GetCookieHelper(context ctx.BackgroundContext) Helper {
+func GetHelper(context ctx.BackgroundContext) Helper {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return Helper(cookieHelper{

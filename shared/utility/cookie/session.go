@@ -51,7 +51,7 @@ func GetSession(context ctx.BackgroundContext) Session {
 		return Session(session{
 			setting:      *GetSessionSettings(context),
 			cache:        defaultCache.CacheCore(context),
-			cookie:       GetCookieHelper(context),
+			cookie:       GetHelper(context),
 			errorService: loggers.GetErrorService(context),
 		}), nil
 	}).(Session)

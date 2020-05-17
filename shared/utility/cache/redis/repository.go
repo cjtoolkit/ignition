@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cjtoolkit/ignition/shared/utility/cache/internal"
+
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
@@ -100,7 +102,7 @@ func (r cacheModifiedRepository) getModifiedTime(modifiedName string, context ct
 	if b, err := r.redisCore.GetBytes(modifiedName); err == nil {
 		_ = json.Unmarshal(b, &modifiedTime)
 
-		checkIfModifiedSince(context.Request(), modifiedTime)
+		internal.CheckIfModifiedSince(context.Request(), modifiedTime)
 	}
 	return modifiedTime
 }

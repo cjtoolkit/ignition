@@ -8,6 +8,7 @@ const (
 	// Cache
 	CachePrefix         = "prefix-%s"
 	CachePrefixModified = "prefix-%s-modified"
+	CacheFileFolderName = "site"
 
 	// Session
 	SessionCookie      = "session"

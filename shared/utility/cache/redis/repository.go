@@ -3,7 +3,6 @@ package redis
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/cjtoolkit/ignition/shared/utility/cache/internal"
@@ -11,11 +10,6 @@ import (
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
-)
-
-type (
-	Miss func() (data interface{}, b []byte, err error)
-	Hit  func(b []byte) (data interface{}, err error)
 )
 
 func GetCacheRepository(context ctx.BackgroundContext) cache.Repository {
@@ -92,7 +86,7 @@ func (r cacheModifiedRepository) Persist(context ctx.Context, name string, expir
 		return
 	}, hit)
 
-	r.checkModifiedTime(modifiedTime, context)
+	internal.CheckModifiedTime(modifiedTime, context)
 
 	return data
 }
@@ -105,10 +99,4 @@ func (r cacheModifiedRepository) getModifiedTime(modifiedName string, context ct
 		internal.CheckIfModifiedSince(context.Request(), modifiedTime)
 	}
 	return modifiedTime
-}
-
-func (r cacheModifiedRepository) checkModifiedTime(modifiedTime time.Time, context ctx.Context) {
-	if !modifiedTime.IsZero() {
-		context.ResponseWriter().Header().Set("Last-Modified", modifiedTime.UTC().Format(http.TimeFormat))
-	}
 }

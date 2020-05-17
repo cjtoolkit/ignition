@@ -94,7 +94,7 @@ func TestCacheRepostiory(t *testing.T) {
 func TestCacheModifiedRepostiory(t *testing.T) {
 	type Mocks struct {
 		redisCore       *MockCore
-		cacheRepostiory *cache.MockCacheRepository
+		cacheRepostiory *cache.MockRepository
 		errorService    *loggers.MockErrorService
 
 		context        *internal.MockContext
@@ -109,7 +109,7 @@ func TestCacheModifiedRepostiory(t *testing.T) {
 
 		mocks := Mocks{
 			redisCore:       NewMockCore(ctrl),
-			cacheRepostiory: cache.NewMockCacheRepository(ctrl),
+			cacheRepostiory: cache.NewMockRepository(ctrl),
 			errorService:    loggers.NewMockErrorService(ctrl),
 
 			context:        internal.NewMockContext(ctrl),

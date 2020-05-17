@@ -8,6 +8,7 @@ import (
 const (
 	cachePrefix         = constant.CachePrefix
 	cachePrefixModified = constant.CachePrefixModified
+	cacheFileFolderName = constant.CacheFileFolderName
 )
 
 func GetSettings(context ctx.BackgroundContext) *Settings {
@@ -16,6 +17,7 @@ func GetSettings(context ctx.BackgroundContext) *Settings {
 		return &Settings{
 			CachePrefix:         cachePrefix,
 			CachePrefixModified: cachePrefixModified,
+			CacheFileFolderName: cacheFileFolderName,
 		}, nil
 	}).(*Settings)
 }
@@ -23,4 +25,5 @@ func GetSettings(context ctx.BackgroundContext) *Settings {
 type Settings struct {
 	CachePrefix         string
 	CachePrefixModified string
+	CacheFileFolderName string
 }

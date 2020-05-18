@@ -1,7 +1,7 @@
 package urls
 
 const (
-	Index = "/"
+	HomeIndex = "/"
 
 	FontsFiles      = "/fonts/*filepath"
 	JavascriptFiles = "/javascript/*filepath"

@@ -10,18 +10,22 @@ import (
 )
 
 func Encrypt(keyStr string, value []byte) []byte {
+	if value == nil {
+		return nil
+	}
+
 	key, _ := hex.DecodeString(keyStr)
 
 	bReader := bytes.NewReader(value)
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err)
+		return nil
 	}
 
 	iv := make([]byte, aes.BlockSize)
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		panic(err)
+		return nil
 	}
 
 	stream := cipher.NewOFB(block, iv)
@@ -31,18 +35,22 @@ func Encrypt(keyStr string, value []byte) []byte {
 
 	writer := &cipher.StreamWriter{S: stream, W: &out}
 	if _, err := io.Copy(writer, bReader); err != nil {
-		panic(err)
+		return nil
 	}
 
 	return out.Bytes()
 }
 
 func Decrypt(keyStr string, value []byte) []byte {
-	key, _ := hex.DecodeString(keyStr)
+	if value == nil {
+		return nil
+	}
 
 	if len(value) < aes.BlockSize {
-		panic("ciphertext too short")
+		return nil
 	}
+
+	key, _ := hex.DecodeString(keyStr)
 
 	iv := value[:aes.BlockSize]
 	value = value[aes.BlockSize:]
@@ -51,7 +59,7 @@ func Decrypt(keyStr string, value []byte) []byte {
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err)
+		return nil
 	}
 
 	stream := cipher.NewOFB(block, iv)
@@ -60,7 +68,7 @@ func Decrypt(keyStr string, value []byte) []byte {
 
 	reader := &cipher.StreamReader{S: stream, R: bReader}
 	if _, err := io.Copy(&out, reader); err != nil {
-		panic(err)
+		return nil
 	}
 
 	return out.Bytes()

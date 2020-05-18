@@ -84,18 +84,26 @@ func (s session) getSerial(context ctx.Context) string {
 }
 
 func (s session) getSerialPersist(context ctx.Context) string {
-	type serialContext struct{}
-	return context.PersistData(serialContext{}, func() interface{} {
+	type c struct{}
+	return context.PersistData(c{}, func() interface{} {
 		return s.getSerial(context)
 	}).(string)
 }
 
-func (s session) getSessionKey(context ctx.Context) string {
-	return strings.Split(s.getSerialPersist(context), ",")[0]
+type sessionData struct {
+	SessionKey    string
+	EncryptionKey string
 }
 
-func (s session) getEncryptionKey(context ctx.Context) string {
-	return strings.Split(s.getSerialPersist(context), ",")[1]
+func (s session) data(context ctx.Context) *sessionData {
+	type c struct{}
+	return context.PersistData(c{}, func() interface{} {
+		keys := strings.Split(s.getSerialPersist(context), ",")
+		return &sessionData{
+			SessionKey:    keys[0],
+			EncryptionKey: keys[1],
+		}
+	}).(*sessionData)
 }
 
 func (s session) updateCookie(context ctx.Context) {
@@ -111,19 +119,21 @@ func (s session) formatName(serial, name string) string {
 }
 
 func (s session) Set(context ctx.Context, name string, value []byte) {
-	s.cache.SetBytes(s.formatName(s.getSessionKey(context), name),
-		internal.Encrypt(s.getEncryptionKey(context), value), 1*time.Hour)
+	d := s.data(context)
+	s.cache.SetBytes(s.formatName(d.SessionKey, name),
+		internal.Encrypt(d.EncryptionKey, value), 1*time.Hour)
 	s.updateCookie(context)
 }
 
 func (s session) Get(context ctx.Context, name string) []byte {
-	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(s.getSessionKey(context), name), 1*time.Hour)
-	b = internal.Decrypt(s.getEncryptionKey(context), b)
+	d := s.data(context)
+	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(d.SessionKey, name), 1*time.Hour)
+	b = internal.Decrypt(d.EncryptionKey, b)
 	return b
 }
 
 func (s session) Delete(context ctx.Context, name string) {
-	s.cache.Delete(s.formatName(s.getSessionKey(context), name))
+	s.cache.Delete(s.formatName(s.data(context).SessionKey, name))
 }
 
 func (s session) GetDel(context ctx.Context, name string) []byte {

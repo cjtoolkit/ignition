@@ -71,14 +71,17 @@ func (s session) getSerial(context ctx.Context) string {
 			return s.cookie.GetValue(context, s.setting.SessionCookie)
 		},
 		func() string {
-			key1 := make([]byte, 32)
-			_, err := rand.Read(key1)
+			sessionKey := make([]byte, 32)
+			_, err := rand.Read(sessionKey)
 			s.errorService.CheckErrorAndPanic(err)
-			key2 := make([]byte, 32)
-			_, err = rand.Read(key2)
+			encryptionKey := make([]byte, 32)
+			_, err = rand.Read(encryptionKey)
+			s.errorService.CheckErrorAndPanic(err)
+			hmacKey := make([]byte, 32)
+			_, err = rand.Read(hmacKey)
 			s.errorService.CheckErrorAndPanic(err)
 
-			return fmt.Sprintf("%x,%x", key1, key2)
+			return fmt.Sprintf("%x,%x,%x", sessionKey, encryptionKey, hmacKey)
 		},
 	)
 }
@@ -93,6 +96,7 @@ func (s session) getSerialPersist(context ctx.Context) string {
 type sessionData struct {
 	SessionKey    string
 	EncryptionKey string
+	HmacKey       string
 }
 
 func (s session) data(context ctx.Context) *sessionData {
@@ -102,6 +106,7 @@ func (s session) data(context ctx.Context) *sessionData {
 		return &sessionData{
 			SessionKey:    keys[0],
 			EncryptionKey: keys[1],
+			HmacKey:       keys[2],
 		}
 	}).(*sessionData)
 }
@@ -121,14 +126,14 @@ func (s session) formatName(serial, name string) string {
 func (s session) Set(context ctx.Context, name string, value []byte) {
 	d := s.data(context)
 	s.cache.SetBytes(s.formatName(d.SessionKey, name),
-		internal.Encrypt(d.EncryptionKey, value), 1*time.Hour)
+		internal.Sign(d.HmacKey, internal.Encrypt(d.EncryptionKey, value)), 1*time.Hour)
 	s.updateCookie(context)
 }
 
 func (s session) Get(context ctx.Context, name string) []byte {
 	d := s.data(context)
 	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(d.SessionKey, name), 1*time.Hour)
-	b = internal.Decrypt(d.EncryptionKey, b)
+	b = internal.Decrypt(d.EncryptionKey, internal.Check(d.HmacKey, b))
 	return b
 }
 

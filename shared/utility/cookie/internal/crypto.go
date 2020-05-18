@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/hmac"
 	"crypto/rand"
+	"crypto/sha512"
 	"encoding/hex"
 	"io"
 )
@@ -72,4 +74,39 @@ func Decrypt(keyStr string, value []byte) []byte {
 	}
 
 	return out.Bytes()
+}
+
+func Sign(keyStr string, message []byte) []byte {
+	if message == nil {
+		return nil
+	}
+
+	key, _ := hex.DecodeString(keyStr)
+	mac := hmac.New(sha512.New, key)
+	mac.Write(message)
+	messageMac := mac.Sum(nil)
+
+	return append(messageMac, message...)
+}
+
+func Check(keyStr string, message []byte) []byte {
+	if message == nil {
+		return nil
+	}
+	if len(message) < sha512.Size {
+		return nil
+	}
+
+	messageMac := message[:sha512.Size]
+	message = message[sha512.Size:]
+
+	key, _ := hex.DecodeString(keyStr)
+	mac := hmac.New(sha512.New, key)
+	mac.Write(message)
+	expectedMac := mac.Sum(nil)
+	if !hmac.Equal(messageMac, expectedMac) {
+		return nil
+	}
+
+	return message
 }

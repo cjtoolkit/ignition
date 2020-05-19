@@ -4,10 +4,9 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
+	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
-
-	"github.com/cjtoolkit/ctx"
 	"golang.org/x/crypto/bcrypt"
 )
 

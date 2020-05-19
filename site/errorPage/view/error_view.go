@@ -6,11 +6,9 @@ import (
 	"html/template"
 
 	"github.com/cjtoolkit/ctx"
-	"github.com/cjtoolkit/ignition/shared/utility/embedder"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	"github.com/cjtoolkit/ignition/site/errorPage/model"
 	"github.com/cjtoolkit/ignition/site/errorPage/view/internal"
-	"github.com/cjtoolkit/ignition/site/master"
 )
 
 type ErrorView interface {
@@ -25,7 +23,7 @@ type errorView struct {
 func NewErrorView(context ctx.BackgroundContext) ErrorView {
 	return errorView{
 		errorService:  loggers.GetErrorService(context),
-		errorTemplate: buildErrorTemplate(context),
+		errorTemplate: internal.BuildErrorTemplate(context),
 	}
 }
 
@@ -51,8 +49,4 @@ func (v errorView) ErrorTemplate(context ctx.Context, code int, title string, da
 		},
 	})
 	v.errorService.CheckErrorAndLog(err)
-}
-
-func buildErrorTemplate(context ctx.BackgroundContext) *template.Template {
-	return template.Must(master.CloneMasterTemplate(context).Parse(string(embedder.DecodeValue(internal.Error))))
 }

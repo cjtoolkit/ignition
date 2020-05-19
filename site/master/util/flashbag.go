@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"html/template"
 
+	internal2 "github.com/cjtoolkit/ignition/site/master/internal/internal"
+
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/cookie"
 	"github.com/cjtoolkit/ignition/shared/utility/embedder"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
-	"github.com/cjtoolkit/ignition/site/master/internal"
 	internalMock "github.com/cjtoolkit/ignition/site/master/util/internal"
 )
 
@@ -87,5 +88,5 @@ func render(errorService loggers.ErrorService, t internalMock.Template, context 
 }
 
 func buildFlashBagHtml() *template.Template {
-	return template.Must(template.New("FlashBag").Parse(embedder.DecodeValueStr(internal.Flashbag)))
+	return template.Must(template.New("FlashBag").Parse(embedder.DecodeValueStr(internal2.Flashbag)))
 }

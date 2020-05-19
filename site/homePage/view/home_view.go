@@ -15,23 +15,16 @@ type HomeView interface {
 	ExecIndexView(context ctx.Context, data model.Index)
 }
 
-func GetHomeView(context ctx.BackgroundContext) HomeView {
-	type c struct{}
-	return context.Persist(c{}, func() (interface{}, error) {
-		return initHomeView(context), nil
-	}).(HomeView)
+func NewHomeView(context ctx.BackgroundContext) HomeView {
+	return homeView{
+		indexTpl:     internal.BuildIndexTemplate(context),
+		errorService: loggers.GetErrorService(context),
+	}
 }
 
 type homeView struct {
 	indexTpl     *template.Template
 	errorService loggers.ErrorService
-}
-
-func initHomeView(context ctx.BackgroundContext) homeView {
-	return homeView{
-		indexTpl:     internal.BuildIndexTemplate(context),
-		errorService: loggers.GetErrorService(context),
-	}
 }
 
 func (h homeView) ExecIndexView(context ctx.Context, data model.Index) {

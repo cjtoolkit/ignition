@@ -11,7 +11,7 @@ type HomeController struct {
 }
 
 func GetHomeController(context ctx.BackgroundContext) HomeController {
-	return HomeController{view: view.GetHomeView(context)}
+	return HomeController{view: view.NewHomeView(context)}
 }
 
 func (h HomeController) Index(context ctx.Context) {

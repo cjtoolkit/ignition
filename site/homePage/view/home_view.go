@@ -6,11 +6,9 @@ import (
 	"html/template"
 
 	"github.com/cjtoolkit/ctx"
-	"github.com/cjtoolkit/ignition/shared/utility/embedder"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	"github.com/cjtoolkit/ignition/site/homePage/model"
 	"github.com/cjtoolkit/ignition/site/homePage/view/internal"
-	"github.com/cjtoolkit/ignition/site/master"
 )
 
 type HomeView interface {
@@ -31,7 +29,7 @@ type homeView struct {
 
 func initHomeView(context ctx.BackgroundContext) homeView {
 	return homeView{
-		indexTpl:     buildIndexTemplate(context),
+		indexTpl:     internal.BuildIndexTemplate(context),
 		errorService: loggers.GetErrorService(context),
 	}
 }
@@ -48,8 +46,4 @@ func (h homeView) ExecIndexView(context ctx.Context, data model.Index) {
 		Context: context,
 		Local:   data,
 	}))
-}
-
-func buildIndexTemplate(context ctx.BackgroundContext) *template.Template {
-	return template.Must(master.CloneMasterTemplate(context).Parse(embedder.DecodeValueStr(internal.Index)))
 }

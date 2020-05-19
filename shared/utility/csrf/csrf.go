@@ -3,6 +3,7 @@
 package csrf
 
 import (
+	"encoding/hex"
 	"html/template"
 	"net/http"
 
@@ -34,7 +35,7 @@ func GetController(context ctx.BackgroundContext) Controller {
 func initCsrfController(context ctx.BackgroundContext) Controller {
 	return csrfController{
 		csrfProtect: csrf.Protect(
-			[]byte(configuration.GetConfig(context).CsrfKey),
+			convertToByte(configuration.GetConfig(context).CsrfKey),
 			csrf.Secure(false),
 			csrf.ErrorHandler(http.HandlerFunc(func(_ http.ResponseWriter, _ *http.Request) {
 				httpError.HaltForbidden("Invalid CSRF Token")
@@ -73,4 +74,12 @@ func (c csrfController) InitCsrf(context ctx.Context) {
 
 func (c csrfController) CheckCsrf(context ctx.Context) {
 	c.GetCsrfData(context)
+}
+
+func convertToByte(csrfKeyStr string) []byte {
+	csrfKey, err := hex.DecodeString(csrfKeyStr)
+	if err != nil {
+		csrfKey = []byte(csrfKeyStr)
+	}
+	return csrfKey
 }

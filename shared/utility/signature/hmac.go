@@ -6,6 +6,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha512"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 
 	"github.com/cjtoolkit/ctx"
@@ -28,7 +29,7 @@ func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
 	type HmacUtilContext struct{}
 	return context.Persist(HmacUtilContext{}, func() (interface{}, error) {
 		return HmacUtil(hmacUtil{
-			key:          []byte(configuration.GetConfig(context).HmacKey),
+			key:          convertToByte(configuration.GetConfig(context).HmacKey),
 			errorService: loggers.GetErrorService(context),
 			hash:         GetHasher(context),
 		}), nil
@@ -86,3 +87,11 @@ func checkBoolAndForbid(ok bool) {
 }
 
 func callHalt() { httpError.HaltForbidden("Hmac Signature Check Failed.") }
+
+func convertToByte(hmacKeyStr string) []byte {
+	hmacKey, err := hex.DecodeString(hmacKeyStr)
+	if err != nil {
+		hmacKey = []byte(hmacKeyStr)
+	}
+	return hmacKey
+}

@@ -16,8 +16,8 @@ import (
 )
 
 type HmacUtil interface {
-	Sign(context ctx.Context, message string) string
-	Check(context ctx.Context, message string) string
+	Sign(context ctx.Context, message []byte) string
+	Check(context ctx.Context, message string) []byte
 }
 
 func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
@@ -35,14 +35,13 @@ type hmacUtil struct {
 	errorService loggers.ErrorService
 }
 
-func (u hmacUtil) Sign(context ctx.Context, message string) string {
-	messageB := []byte(message)
-	sum := hmacSum(messageB, u.key)
+func (u hmacUtil) Sign(context ctx.Context, message []byte) string {
+	sum := hmacSum(message, u.key)
 
-	return base64.URLEncoding.EncodeToString(append(sum, messageB...))
+	return base64.URLEncoding.EncodeToString(append(sum, message...))
 }
 
-func (u hmacUtil) Check(context ctx.Context, message string) string {
+func (u hmacUtil) Check(context ctx.Context, message string) []byte {
 	messageB, err := base64.URLEncoding.DecodeString(message)
 	checkErrorAndForbid(err)
 	checkErrorAndForbid(checkSize(messageB))
@@ -52,7 +51,7 @@ func (u hmacUtil) Check(context ctx.Context, message string) string {
 
 	checkBoolAndForbid(hmac.Equal(currentSum, hmacSum(messageB, u.key)))
 
-	return string(messageB)
+	return messageB
 }
 
 func hmacSum(message []byte, key []byte) []byte {

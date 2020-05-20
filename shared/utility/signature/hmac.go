@@ -5,7 +5,6 @@ package signature
 import (
 	"crypto/hmac"
 	"crypto/sha512"
-	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 
@@ -16,8 +15,10 @@ import (
 )
 
 type HmacUtil interface {
-	Sign(context ctx.Context, message []byte) string
-	Check(context ctx.Context, message string) []byte
+	SignWithKey(key []byte, message []byte) []byte
+	Sign(message []byte) []byte
+	CheckWithKey(key []byte, message []byte) []byte
+	Check(message []byte) []byte
 }
 
 func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
@@ -35,23 +36,29 @@ type hmacUtil struct {
 	errorService loggers.ErrorService
 }
 
-func (u hmacUtil) Sign(context ctx.Context, message []byte) string {
-	sum := hmacSum(message, u.key)
+func (u hmacUtil) SignWithKey(key []byte, message []byte) []byte {
+	sum := hmacSum(message, key)
 
-	return base64.URLEncoding.EncodeToString(append(sum, message...))
+	return append(sum, message...)
 }
 
-func (u hmacUtil) Check(context ctx.Context, message string) []byte {
-	messageB, err := base64.URLEncoding.DecodeString(message)
-	checkErrorAndForbid(err)
-	checkErrorAndForbid(checkSize(messageB))
+func (u hmacUtil) Sign(message []byte) []byte {
+	return u.SignWithKey(u.key, message)
+}
 
-	currentSum := messageB[:sha512.Size]
-	messageB = messageB[sha512.Size:]
+func (u hmacUtil) CheckWithKey(key []byte, message []byte) []byte {
+	checkErrorAndForbid(checkSize(message))
 
-	checkBoolAndForbid(hmac.Equal(currentSum, hmacSum(messageB, u.key)))
+	currentSum := message[:sha512.Size]
+	message = message[sha512.Size:]
 
-	return messageB
+	checkBoolAndForbid(hmac.Equal(currentSum, hmacSum(message, key)))
+
+	return message
+}
+
+func (u hmacUtil) Check(message []byte) []byte {
+	return u.CheckWithKey(u.key, message)
 }
 
 func hmacSum(message []byte, key []byte) []byte {

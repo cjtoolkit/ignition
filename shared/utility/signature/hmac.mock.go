@@ -6,7 +6,6 @@
 package signature
 
 import (
-	ctx "github.com/cjtoolkit/ctx"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -34,30 +33,58 @@ func (m *MockHmacUtil) EXPECT() *MockHmacUtilMockRecorder {
 	return m.recorder
 }
 
-// Sign mocks base method
-func (m *MockHmacUtil) Sign(context ctx.Context, message string) string {
+// SignWithKey mocks base method
+func (m *MockHmacUtil) SignWithKey(key, message []byte) []byte {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Sign", context, message)
-	ret0, _ := ret[0].(string)
+	ret := m.ctrl.Call(m, "SignWithKey", key, message)
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
+
+// SignWithKey indicates an expected call of SignWithKey
+func (mr *MockHmacUtilMockRecorder) SignWithKey(key, message interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignWithKey", reflect.TypeOf((*MockHmacUtil)(nil).SignWithKey), key, message)
+}
+
+// Sign mocks base method
+func (m *MockHmacUtil) Sign(message []byte) []byte {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Sign", message)
+	ret0, _ := ret[0].([]byte)
 	return ret0
 }
 
 // Sign indicates an expected call of Sign
-func (mr *MockHmacUtilMockRecorder) Sign(context, message interface{}) *gomock.Call {
+func (mr *MockHmacUtilMockRecorder) Sign(message interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Sign", reflect.TypeOf((*MockHmacUtil)(nil).Sign), context, message)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Sign", reflect.TypeOf((*MockHmacUtil)(nil).Sign), message)
+}
+
+// CheckWithKey mocks base method
+func (m *MockHmacUtil) CheckWithKey(key, message []byte) []byte {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckWithKey", key, message)
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
+
+// CheckWithKey indicates an expected call of CheckWithKey
+func (mr *MockHmacUtilMockRecorder) CheckWithKey(key, message interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckWithKey", reflect.TypeOf((*MockHmacUtil)(nil).CheckWithKey), key, message)
 }
 
 // Check mocks base method
-func (m *MockHmacUtil) Check(context ctx.Context, message string) string {
+func (m *MockHmacUtil) Check(message []byte) []byte {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Check", context, message)
-	ret0, _ := ret[0].(string)
+	ret := m.ctrl.Call(m, "Check", message)
+	ret0, _ := ret[0].([]byte)
 	return ret0
 }
 
 // Check indicates an expected call of Check
-func (mr *MockHmacUtilMockRecorder) Check(context, message interface{}) *gomock.Call {
+func (mr *MockHmacUtilMockRecorder) Check(message interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockHmacUtil)(nil).Check), context, message)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockHmacUtil)(nil).Check), message)
 }

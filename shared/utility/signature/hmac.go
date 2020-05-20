@@ -7,18 +7,13 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
+	"fmt"
 
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/httpError"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 )
-
-type hmacData struct {
-	Message string
-	Hash    []byte
-}
 
 type HmacUtil interface {
 	Sign(context ctx.Context, message string) string
@@ -31,7 +26,6 @@ func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
 		return HmacUtil(hmacUtil{
 			key:          convertToByte(configuration.GetConfig(context).HmacKey),
 			errorService: loggers.GetErrorService(context),
-			hash:         GetHasher(context),
 		}), nil
 	}).(HmacUtil)
 }
@@ -39,38 +33,31 @@ func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
 type hmacUtil struct {
 	key          []byte
 	errorService loggers.ErrorService
-	hash         Hash
 }
 
 func (u hmacUtil) Sign(context ctx.Context, message string) string {
-	data := hmacData{
-		Message: message,
-		Hash:    hmacSum(message, u.hash.Sum(context), u.key),
-	}
+	messageB := []byte(message)
+	sum := hmacSum(messageB, u.key)
 
-	b, err := json.Marshal(data)
-	u.errorService.CheckErrorAndPanic(err)
-
-	return base64.URLEncoding.EncodeToString(b)
+	return base64.URLEncoding.EncodeToString(append(sum, messageB...))
 }
 
 func (u hmacUtil) Check(context ctx.Context, message string) string {
-	b, err := base64.URLEncoding.DecodeString(message)
+	messageB, err := base64.URLEncoding.DecodeString(message)
 	checkErrorAndForbid(err)
+	checkErrorAndForbid(checkSize(messageB))
 
-	data := hmacData{}
-	err = json.Unmarshal(b, &data)
-	checkErrorAndForbid(err)
+	currentSum := messageB[:sha512.Size]
+	messageB = messageB[sha512.Size:]
 
-	checkBoolAndForbid(hmac.Equal(data.Hash, hmacSum(data.Message, u.hash.Sum(context), u.key)))
+	checkBoolAndForbid(hmac.Equal(currentSum, hmacSum(messageB, u.key)))
 
-	return data.Message
+	return string(messageB)
 }
 
-func hmacSum(message string, extraHash, key []byte) []byte {
+func hmacSum(message []byte, key []byte) []byte {
 	mac := hmac.New(sha512.New, key)
-	mac.Write(extraHash)
-	mac.Write([]byte(message))
+	mac.Write(message)
 	return mac.Sum(nil)
 }
 
@@ -94,4 +81,12 @@ func convertToByte(hmacKeyStr string) []byte {
 		hmacKey = []byte(hmacKeyStr)
 	}
 	return hmacKey
+}
+
+func checkSize(message []byte) error {
+	if len(message) < sha512.Size {
+		return fmt.Errorf("it is less '%d' bytes in size", sha512.Size)
+	}
+
+	return nil
 }

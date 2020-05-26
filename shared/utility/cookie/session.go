@@ -23,7 +23,7 @@ const (
 	sessionCachePrefix = constant.SessionCachePrefix
 )
 
-func GetSessionSettings(context ctx.BackgroundContext) *SessionSettings {
+func GetSessionSettings(context ctx.Context) *SessionSettings {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return &SessionSettings{
@@ -46,7 +46,7 @@ type Session interface {
 	Destroy(context ctx.Context)
 }
 
-func GetSession(context ctx.BackgroundContext) Session {
+func GetSession(context ctx.Context) Session {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return Session(session{
@@ -88,8 +88,8 @@ func (s session) getSerial(context ctx.Context) string {
 
 func (s session) getSerialPersist(context ctx.Context) string {
 	type c struct{}
-	return context.PersistData(c{}, func() interface{} {
-		return s.getSerial(context)
+	return context.Persist(c{}, func() (interface{}, error) {
+		return s.getSerial(context), nil
 	}).(string)
 }
 
@@ -101,13 +101,13 @@ type sessionData struct {
 
 func (s session) data(context ctx.Context) *sessionData {
 	type c struct{}
-	return context.PersistData(c{}, func() interface{} {
+	return context.Persist(c{}, func() (interface{}, error) {
 		keys := strings.Split(s.getSerialPersist(context), ",")
 		return &sessionData{
 			SessionKey:    keys[0],
 			EncryptionKey: keys[1],
 			HmacKey:       keys[2],
-		}
+		}, nil
 	}).(*sessionData)
 }
 

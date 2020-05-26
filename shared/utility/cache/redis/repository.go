@@ -12,7 +12,7 @@ import (
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 )
 
-func GetCacheRepository(context ctx.BackgroundContext) cache.Repository {
+func GetCacheRepository(context ctx.Context) cache.Repository {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return cache.Repository(cacheRepository{
@@ -50,7 +50,7 @@ func (r cacheRepository) Persist(name string, expiration time.Duration, miss cac
 	return data
 }
 
-func GetCacheModifiedRepository(context ctx.BackgroundContext) cache.ModifiedRepository {
+func GetCacheModifiedRepository(context ctx.Context) cache.ModifiedRepository {
 	type cacheModifiedRepositoryContext struct{}
 	return context.Persist(cacheModifiedRepositoryContext{}, func() (interface{}, error) {
 		return cache.ModifiedRepository(cacheModifiedRepository{

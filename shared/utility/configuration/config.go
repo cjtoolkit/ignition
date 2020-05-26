@@ -29,7 +29,7 @@ type Redis struct {
 	Addr string
 }
 
-func GetConfig(context ctx.BackgroundContext) Base {
+func GetConfig(context ctx.Context) Base {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		config := &Base{}
@@ -38,7 +38,7 @@ func GetConfig(context ctx.BackgroundContext) Base {
 	}).(Base)
 }
 
-func ParseConfig(context ctx.BackgroundContext, fileName string, v interface{}) {
+func ParseConfig(context ctx.Context, fileName string, v interface{}) {
 	location := environment.GetEnvironment(context).ParseConfigDirectory() + filepath.FromSlash("/"+fileName)
 	errorService := loggers.GetBlankErrorService(context)
 

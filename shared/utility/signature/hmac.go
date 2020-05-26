@@ -21,7 +21,7 @@ type HmacUtil interface {
 	Check(message []byte) []byte
 }
 
-func GetHmacUtil(context ctx.BackgroundContext) HmacUtil {
+func GetHmacUtil(context ctx.Context) HmacUtil {
 	type HmacUtilContext struct{}
 	return context.Persist(HmacUtilContext{}, func() (interface{}, error) {
 		return HmacUtil(hmacUtil{

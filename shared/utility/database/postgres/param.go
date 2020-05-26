@@ -32,7 +32,7 @@ type ParamBuilder interface {
 	BuildParamTemplateAndPrepare(dbConn *sql.DB, query string) (*sql.Stmt, ParamTemplate, error)
 }
 
-func GetParamBuilder(context ctx.BackgroundContext) ParamBuilder {
+func GetParamBuilder(context ctx.Context) ParamBuilder {
 	type paramBuilderContext struct{}
 	return context.Persist(paramBuilderContext{}, func() (interface{}, error) {
 		return ParamBuilder(paramBuilder{

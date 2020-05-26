@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/cjtoolkit/ctx/ctxHttp"
+
 	"github.com/cjtoolkit/ignition/shared/utility/command/param"
 
 	"github.com/cjtoolkit/ctx"
@@ -31,7 +33,7 @@ type Router interface {
 	SetPanicHandler(f func(http.ResponseWriter, *http.Request, interface{}))
 }
 
-func GetRouter(context ctx.BackgroundContext) Router {
+func GetRouter(context ctx.Context) Router {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return initRouter(context), nil
@@ -43,7 +45,7 @@ type router struct {
 	production bool
 }
 
-func initRouter(context ctx.BackgroundContext) *router {
+func initRouter(context ctx.Context) *router {
 	return &router{
 		router:     getBaseRouter(context),
 		production: param.GetParam(context).Production,
@@ -62,7 +64,7 @@ func (r *router) SetMethodNotAllowed(h http.Handler) { r.router.MethodNotAllowed
 
 func (r *router) Handle(method, path string, handle Handle) {
 	r.router.Handle(method, path, func(_ http.ResponseWriter, request *http.Request, params httprouter.Params) {
-		handle(ctx.GetContext(request), params)
+		handle(ctxHttp.Context(request), params)
 	})
 }
 
@@ -80,7 +82,7 @@ func (r *router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if !r.production {
 		log.Printf("HTTP: %q: %q", req.Method, req.URL.String())
 	}
-	req, _ = ctx.NewContext(w, req)
+	req = ctxHttp.NewContext(req, w)
 	r.router.ServeHTTP(w, req)
 }
 

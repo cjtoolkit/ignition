@@ -1,6 +1,8 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/cjtoolkit/ctx v1.1.0 h1:I5CYxCpBgf53WBsbtexKDTohA+kHY1Dj+kQ5XM25aBE=
 github.com/cjtoolkit/ctx v1.1.0/go.mod h1:y6HCczTZ82vY+sBkZ/WdpdVKQlWl7YHYEEbwVsOtaQE=
+github.com/cjtoolkit/ctx v1.1.1-0.20200526095256-77a0adcc9db9 h1:N/d1Ku28eim2vCLOOBKGCcqBDW6EGDUv9KVEmm/6G9g=
+github.com/cjtoolkit/ctx v1.1.1-0.20200526095256-77a0adcc9db9/go.mod h1:mXHLi6LUB4OvzfAilE3NKYZ/bxzZK1enNZnEliooYXI=
 github.com/cjtoolkit/taskforce v1.0.0 h1:I2k2YD7NZGavIJx/xo4DckN6RTIHyzNXvVQ2+VmUrYI=
 github.com/cjtoolkit/taskforce v1.0.0/go.mod h1:kVToaaamTd3mklFcm6i3pDZybmSgC/YsKfWVquSMA8g=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

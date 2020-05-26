@@ -11,7 +11,7 @@ const (
 	cacheFileFolderName = constant.CacheFileFolderName
 )
 
-func GetSettings(context ctx.BackgroundContext) *Settings {
+func GetSettings(context ctx.Context) *Settings {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return &Settings{

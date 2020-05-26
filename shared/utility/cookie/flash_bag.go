@@ -12,7 +12,7 @@ import (
 
 const flashBagSession = constant.FlashBagSession
 
-func GetFlashBagSetting(context ctx.BackgroundContext) *FlashBagSetting {
+func GetFlashBagSetting(context ctx.Context) *FlashBagSetting {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return &FlashBagSetting{FlashBagSession: flashBagSession}, nil
@@ -63,7 +63,7 @@ type FlashBag interface {
 	SaveFlashBagToSession(context ctx.Context)
 }
 
-func GetFlashBag(context ctx.BackgroundContext) FlashBag {
+func GetFlashBag(context ctx.Context) FlashBag {
 	type flashBagContext struct{}
 	return context.Persist(flashBagContext{}, func() (interface{}, error) {
 		return FlashBag(flashBag{
@@ -82,13 +82,13 @@ type flashBag struct {
 
 func (f flashBag) GetFlashBag(context ctx.Context) FlashBagValues {
 	type flashBagContext struct{}
-	return context.PersistData(flashBagContext{}, func() interface{} {
+	return context.Persist(flashBagContext{}, func() (interface{}, error) {
 		fB := FlashBagValues{}
 
 		b := f.session.GetDel(context, f.sessionName)
 		_ = json.Unmarshal(b, &fB)
 
-		return fB
+		return fB, nil
 	}).(FlashBagValues)
 }
 

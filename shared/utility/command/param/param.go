@@ -13,7 +13,7 @@ type Param struct {
 	TestRun    bool
 }
 
-func GetParam(context ctx.BackgroundContext) Param {
+func GetParam(context ctx.Context) Param {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return initParam(), nil

@@ -20,7 +20,7 @@ type password struct {
 	errorService loggers.ErrorService
 }
 
-func GetPassword(context ctx.BackgroundContext) Password {
+func GetPassword(context ctx.Context) Password {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return Password(password{

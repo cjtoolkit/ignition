@@ -7,9 +7,9 @@ import (
 )
 
 type (
-	CacheCoreFn               func(context ctx.BackgroundContext) cache.Core
-	CacheRepositoryFn         func(context ctx.BackgroundContext) cache.Repository
-	CacheModifiedRepositoryFn func(context ctx.BackgroundContext) cache.ModifiedRepository
+	CacheCoreFn               func(context ctx.Context) cache.Core
+	CacheRepositoryFn         func(context ctx.Context) cache.Repository
+	CacheModifiedRepositoryFn func(context ctx.Context) cache.ModifiedRepository
 )
 
 type defaultCache struct {
@@ -18,11 +18,11 @@ type defaultCache struct {
 	cacheModifiedRepository CacheModifiedRepositoryFn
 }
 
-func getDefaultCache(context ctx.BackgroundContext) *defaultCache {
+func getDefaultCache(context ctx.Context) *defaultCache {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return &defaultCache{
-			cacheCore: func(context ctx.BackgroundContext) cache.Core {
+			cacheCore: func(context ctx.Context) cache.Core {
 				return redis.GetCore(context)
 			},
 			cacheRepository:         redis.GetCacheRepository,
@@ -31,26 +31,26 @@ func getDefaultCache(context ctx.BackgroundContext) *defaultCache {
 	}).(*defaultCache)
 }
 
-func SetCacheCore(context ctx.BackgroundContext, cacheCore CacheCoreFn) {
+func SetCacheCore(context ctx.Context, cacheCore CacheCoreFn) {
 	getDefaultCache(context).cacheCore = cacheCore
 }
 
-func SetCacheRepository(context ctx.BackgroundContext, cacheRepository CacheRepositoryFn) {
+func SetCacheRepository(context ctx.Context, cacheRepository CacheRepositoryFn) {
 	getDefaultCache(context).cacheRepository = cacheRepository
 }
 
-func SetCacheModifiedRepository(context ctx.BackgroundContext, cacheModifiedRepository CacheModifiedRepositoryFn) {
+func SetCacheModifiedRepository(context ctx.Context, cacheModifiedRepository CacheModifiedRepositoryFn) {
 	getDefaultCache(context).cacheModifiedRepository = cacheModifiedRepository
 }
 
-func CacheCore(context ctx.BackgroundContext) cache.Core {
+func CacheCore(context ctx.Context) cache.Core {
 	return getDefaultCache(context).cacheCore(context)
 }
 
-func CacheRepository(context ctx.BackgroundContext) cache.Repository {
+func CacheRepository(context ctx.Context) cache.Repository {
 	return getDefaultCache(context).cacheRepository(context)
 }
 
-func CacheModifiedRepository(context ctx.BackgroundContext) cache.ModifiedRepository {
+func CacheModifiedRepository(context ctx.Context) cache.ModifiedRepository {
 	return getDefaultCache(context).cacheModifiedRepository(context)
 }

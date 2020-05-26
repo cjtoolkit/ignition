@@ -12,7 +12,7 @@ import (
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/httpError"
 
-	ctx "github.com/cjtoolkit/ctx/v2"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/gorilla/csrf"
 )
 

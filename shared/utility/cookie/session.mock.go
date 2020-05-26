@@ -6,9 +6,10 @@
 package cookie
 
 import (
-	ctx "github.com/cjtoolkit/ctx/v2"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+
+	"github.com/cjtoolkit/ctx/v2"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockSession is a mock of Session interface

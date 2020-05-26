@@ -3,7 +3,7 @@ package postgres
 import (
 	"database/sql"
 
-	ctx "github.com/cjtoolkit/ctx/v2"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/embedder"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"

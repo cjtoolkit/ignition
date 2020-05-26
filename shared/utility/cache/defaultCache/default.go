@@ -1,7 +1,7 @@
 package defaultCache
 
 import (
-	ctx "github.com/cjtoolkit/ctx/v2"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/cache/redis"
 )

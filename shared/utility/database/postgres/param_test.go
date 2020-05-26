@@ -5,7 +5,7 @@ package postgres
 import (
 	"testing"
 
-	ctx "github.com/cjtoolkit/ctx/v2"
+	"github.com/cjtoolkit/ctx/v2"
 )
 
 func TestBuildParamTemplateFromSql(t *testing.T) {

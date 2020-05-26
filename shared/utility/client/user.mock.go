@@ -8,7 +8,7 @@ package client
 import (
 	reflect "reflect"
 
-	ctx "github.com/cjtoolkit/ctx/v2"
+	"github.com/cjtoolkit/ctx/v2"
 	gomock "github.com/golang/mock/gomock"
 )
 

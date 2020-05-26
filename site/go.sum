@@ -1,8 +1,8 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/cjtoolkit/ctx/v2 v2.0.2 h1:H3mXm2Ff2lc1ENvBDRTavD8IfeVYtLajWgdXmVvZyPQ=
-github.com/cjtoolkit/ctx/v2 v2.0.2/go.mod h1:l5P1HztJrlPr5AqCS/NQXjePA5Vu3y9Eekw0LXWe/wk=
-github.com/cjtoolkit/ignition/shared v0.0.0-20200526111431-0132b8872754 h1:z2G1EcEq0tjFtyC/ls8Ipbyc2/+Z3wrlL5KEtE3O4WM=
-github.com/cjtoolkit/ignition/shared v0.0.0-20200526111431-0132b8872754/go.mod h1:FI6DyIDX9l3MjXolMo+Dvwn7bA4Cpp2UYY8XiOsN7es=
+github.com/cjtoolkit/ctx/v2 v2.0.3 h1:+bUQ3YcJBGSsfuSGJIvqRlH4UveLOSzuXGOcPsF7+3I=
+github.com/cjtoolkit/ctx/v2 v2.0.3/go.mod h1:l5P1HztJrlPr5AqCS/NQXjePA5Vu3y9Eekw0LXWe/wk=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200526174755-a24bf6dc9210 h1:jnNQiX8XYS5gtQe3P2ur+h/tJBi8AxoUDF5fbfzivuo=
+github.com/cjtoolkit/ignition/shared v0.0.0-20200526174755-a24bf6dc9210/go.mod h1:fTBoEMdLJ/cTmmIo7P/euRMy4S5hyIeYSk8WEcCpjbc=
 github.com/cjtoolkit/taskforce v1.0.0 h1:I2k2YD7NZGavIJx/xo4DckN6RTIHyzNXvVQ2+VmUrYI=
 github.com/cjtoolkit/taskforce v1.0.0/go.mod h1:kVToaaamTd3mklFcm6i3pDZybmSgC/YsKfWVquSMA8g=
 github.com/cjtoolkit/zipfs v1.0.0 h1:b567A+5gd6CINXrbiGkezXio6dwMTjOwXYCOuZmjQas=

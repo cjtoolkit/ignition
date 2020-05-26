@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/cjtoolkit/ctx/ctxHttp"
+
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/cache/internal"
@@ -107,7 +109,7 @@ func (c cacheModifiedRepository) getModifiedTime(name string, expiration time.Du
 	}
 	modifiedTime = stat.ModTime()
 
-	internal.CheckIfModifiedSince(context.Request(), modifiedTime)
+	internal.CheckIfModifiedSince(ctxHttp.Request(context), modifiedTime)
 
 	return modifiedTime
 }

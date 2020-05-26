@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 )
 
 type Param map[string]interface{}

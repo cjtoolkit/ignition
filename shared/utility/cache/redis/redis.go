@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/cache"
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"

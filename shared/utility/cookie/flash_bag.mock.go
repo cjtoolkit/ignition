@@ -6,9 +6,10 @@
 package cookie
 
 import (
-	ctx "github.com/cjtoolkit/ctx"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+
+	ctx "github.com/cjtoolkit/ctx/v2"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockFlashBag is a mock of FlashBag interface

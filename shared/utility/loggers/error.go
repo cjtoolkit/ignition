@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 )
 
 type ErrorService interface {

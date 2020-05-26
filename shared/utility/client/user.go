@@ -6,9 +6,9 @@ import (
 	"html/template"
 	"strings"
 
-	"github.com/cjtoolkit/ctx/ctxHttp"
+	"github.com/cjtoolkit/ctx/v2/ctxHttp"
 
-	"github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/coalesce"
 )
 

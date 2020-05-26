@@ -2,21 +2,10 @@
 
 package internal
 
-import (
-	"context"
-	"net/http"
-)
-
 type Context interface {
-	Title() string
-	SetTitle(title string)
-	Data(key interface{}) interface{}
-	SetData(key interface{}, value interface{})
-	PersistData(key interface{}, fn func() interface{}) interface{}
-	Dep(key interface{}) interface{}
-	SetDep(key interface{}, value interface{})
-	PersistDep(key interface{}, fn func() interface{}) interface{}
-	Ctx() context.Context
-	Request() *http.Request
-	ResponseWriter() http.ResponseWriter
+	Set(key, value interface{})
+	Get(key interface{}) (interface{}, bool)
+
+	// The fn function only gets called if there is a cache miss. Return error as nil to bypass health check.
+	Persist(key interface{}, fn func() (interface{}, error)) interface{}
 }

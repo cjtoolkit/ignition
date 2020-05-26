@@ -155,11 +155,11 @@ func TestCacheModifiedRepostiory(t *testing.T) {
 			mocks, subject := let(t)
 
 			mocks.redisCore.EXPECT().GetBytes(modifiedName).Return(modifiedTimeB, nil)
-			mocks.context.EXPECT().Request().Return(req)
+			mocks.context.EXPECT().Get(gomock.Any()).Return(req, true)
 
 			mocks.cacheRepostiory.EXPECT().Persist(name, 5*time.Minute, gomock.Any(), gomock.Any()).Times(1)
 
-			mocks.context.EXPECT().ResponseWriter().Return(mocks.responseWriter)
+			mocks.context.EXPECT().Get(gomock.Any()).Return(mocks.responseWriter, true)
 
 			resHeader := http.Header{}
 			mocks.responseWriter.EXPECT().Header().Return(resHeader)
@@ -189,7 +189,7 @@ func TestCacheModifiedRepostiory(t *testing.T) {
 			mocks, subject := let(t)
 
 			mocks.redisCore.EXPECT().GetBytes(modifiedName).Return(modifiedTimeB, nil)
-			mocks.context.EXPECT().Request().Return(req)
+			mocks.context.EXPECT().Get(gomock.Any()).Return(req, true)
 
 			defer func() {
 				if recover() == nil {

@@ -6,9 +6,10 @@
 package client
 
 import (
-	ctx "github.com/cjtoolkit/ctx"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+
+	ctx "github.com/cjtoolkit/ctx/v2"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockUserClient is a mock of UserClient interface

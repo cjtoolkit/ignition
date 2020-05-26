@@ -8,7 +8,7 @@ package csrf
 import (
 	reflect "reflect"
 
-	ctx "github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 	gomock "github.com/golang/mock/gomock"
 )
 

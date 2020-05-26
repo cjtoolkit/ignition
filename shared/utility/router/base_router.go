@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 	"github.com/julienschmidt/httprouter"
 )
 

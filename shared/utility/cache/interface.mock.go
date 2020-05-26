@@ -6,10 +6,11 @@
 package cache
 
 import (
-	ctx "github.com/cjtoolkit/ctx"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	time "time"
+
+	ctx "github.com/cjtoolkit/ctx/v2"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockCore is a mock of Core interface

@@ -7,12 +7,12 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/cjtoolkit/ctx/ctxHttp"
+	"github.com/cjtoolkit/ctx/v2/ctxHttp"
 
 	"github.com/cjtoolkit/ignition/shared/utility/configuration"
 	"github.com/cjtoolkit/ignition/shared/utility/httpError"
 
-	"github.com/cjtoolkit/ctx"
+	ctx "github.com/cjtoolkit/ctx/v2"
 	"github.com/gorilla/csrf"
 )
 

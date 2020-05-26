@@ -6,9 +6,7 @@
 package internal
 
 import (
-	context "context"
 	gomock "github.com/golang/mock/gomock"
-	http "net/http"
 	reflect "reflect"
 )
 
@@ -35,150 +33,43 @@ func (m *MockContext) EXPECT() *MockContextMockRecorder {
 	return m.recorder
 }
 
-// Title mocks base method
-func (m *MockContext) Title() string {
+// Set mocks base method
+func (m *MockContext) Set(key, value interface{}) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Title")
-	ret0, _ := ret[0].(string)
-	return ret0
+	m.ctrl.Call(m, "Set", key, value)
 }
 
-// Title indicates an expected call of Title
-func (mr *MockContextMockRecorder) Title() *gomock.Call {
+// Set indicates an expected call of Set
+func (mr *MockContextMockRecorder) Set(key, value interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Title", reflect.TypeOf((*MockContext)(nil).Title))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContext)(nil).Set), key, value)
 }
 
-// SetTitle mocks base method
-func (m *MockContext) SetTitle(title string) {
+// Get mocks base method
+func (m *MockContext) Get(key interface{}) (interface{}, bool) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetTitle", title)
+	ret := m.ctrl.Call(m, "Get", key)
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(bool)
+	return ret0, ret1
 }
 
-// SetTitle indicates an expected call of SetTitle
-func (mr *MockContextMockRecorder) SetTitle(title interface{}) *gomock.Call {
+// Get indicates an expected call of Get
+func (mr *MockContextMockRecorder) Get(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTitle", reflect.TypeOf((*MockContext)(nil).SetTitle), title)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockContext)(nil).Get), key)
 }
 
-// Data mocks base method
-func (m *MockContext) Data(key interface{}) interface{} {
+// Persist mocks base method
+func (m *MockContext) Persist(key interface{}, fn func() (interface{}, error)) interface{} {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Data", key)
+	ret := m.ctrl.Call(m, "Persist", key, fn)
 	ret0, _ := ret[0].(interface{})
 	return ret0
 }
 
-// Data indicates an expected call of Data
-func (mr *MockContextMockRecorder) Data(key interface{}) *gomock.Call {
+// Persist indicates an expected call of Persist
+func (mr *MockContextMockRecorder) Persist(key, fn interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Data", reflect.TypeOf((*MockContext)(nil).Data), key)
-}
-
-// SetData mocks base method
-func (m *MockContext) SetData(key, value interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetData", key, value)
-}
-
-// SetData indicates an expected call of SetData
-func (mr *MockContextMockRecorder) SetData(key, value interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetData", reflect.TypeOf((*MockContext)(nil).SetData), key, value)
-}
-
-// PersistData mocks base method
-func (m *MockContext) PersistData(key interface{}, fn func() interface{}) interface{} {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PersistData", key, fn)
-	ret0, _ := ret[0].(interface{})
-	return ret0
-}
-
-// PersistData indicates an expected call of PersistData
-func (mr *MockContextMockRecorder) PersistData(key, fn interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PersistData", reflect.TypeOf((*MockContext)(nil).PersistData), key, fn)
-}
-
-// Dep mocks base method
-func (m *MockContext) Dep(key interface{}) interface{} {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Dep", key)
-	ret0, _ := ret[0].(interface{})
-	return ret0
-}
-
-// Dep indicates an expected call of Dep
-func (mr *MockContextMockRecorder) Dep(key interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Dep", reflect.TypeOf((*MockContext)(nil).Dep), key)
-}
-
-// SetDep mocks base method
-func (m *MockContext) SetDep(key, value interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetDep", key, value)
-}
-
-// SetDep indicates an expected call of SetDep
-func (mr *MockContextMockRecorder) SetDep(key, value interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetDep", reflect.TypeOf((*MockContext)(nil).SetDep), key, value)
-}
-
-// PersistDep mocks base method
-func (m *MockContext) PersistDep(key interface{}, fn func() interface{}) interface{} {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PersistDep", key, fn)
-	ret0, _ := ret[0].(interface{})
-	return ret0
-}
-
-// PersistDep indicates an expected call of PersistDep
-func (mr *MockContextMockRecorder) PersistDep(key, fn interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PersistDep", reflect.TypeOf((*MockContext)(nil).PersistDep), key, fn)
-}
-
-// Ctx mocks base method
-func (m *MockContext) Ctx() context.Context {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Ctx")
-	ret0, _ := ret[0].(context.Context)
-	return ret0
-}
-
-// Ctx indicates an expected call of Ctx
-func (mr *MockContextMockRecorder) Ctx() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ctx", reflect.TypeOf((*MockContext)(nil).Ctx))
-}
-
-// Request mocks base method
-func (m *MockContext) Request() *http.Request {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Request")
-	ret0, _ := ret[0].(*http.Request)
-	return ret0
-}
-
-// Request indicates an expected call of Request
-func (mr *MockContextMockRecorder) Request() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Request", reflect.TypeOf((*MockContext)(nil).Request))
-}
-
-// ResponseWriter mocks base method
-func (m *MockContext) ResponseWriter() http.ResponseWriter {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ResponseWriter")
-	ret0, _ := ret[0].(http.ResponseWriter)
-	return ret0
-}
-
-// ResponseWriter indicates an expected call of ResponseWriter
-func (mr *MockContextMockRecorder) ResponseWriter() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ResponseWriter", reflect.TypeOf((*MockContext)(nil).ResponseWriter))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Persist", reflect.TypeOf((*MockContext)(nil).Persist), key, fn)
 }

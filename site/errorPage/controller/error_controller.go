@@ -14,7 +14,7 @@ type ErrorController struct {
 	view       view.ErrorView
 }
 
-func NewErrorController(context ctx.BackgroundContext) ErrorController {
+func NewErrorController(context ctx.Context) ErrorController {
 	return ErrorController{
 		production: param.GetParam(context).Production,
 		view:       view.NewErrorView(context),

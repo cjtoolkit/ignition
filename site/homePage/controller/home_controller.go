@@ -10,7 +10,7 @@ type HomeController struct {
 	view view.HomeView
 }
 
-func GetHomeController(context ctx.BackgroundContext) HomeController {
+func GetHomeController(context ctx.Context) HomeController {
 	return HomeController{view: view.NewHomeView(context)}
 }
 

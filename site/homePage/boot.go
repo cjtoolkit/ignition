@@ -6,7 +6,7 @@ import (
 	"github.com/cjtoolkit/ignition/site/homePage/controller"
 )
 
-func Boot(context ctx.BackgroundContext) {
+func Boot(context ctx.Context) {
 	homeBoot{
 		homeController: controller.GetHomeController(context),
 		router:         router.GetRouter(context),

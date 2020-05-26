@@ -20,7 +20,7 @@ type errorView struct {
 	errorTemplate *template.Template
 }
 
-func NewErrorView(context ctx.BackgroundContext) ErrorView {
+func NewErrorView(context ctx.Context) ErrorView {
 	return errorView{
 		errorService:  loggers.GetErrorService(context),
 		errorTemplate: internal.BuildErrorTemplate(context),

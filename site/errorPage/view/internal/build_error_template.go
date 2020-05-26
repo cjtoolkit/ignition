@@ -10,6 +10,6 @@ import (
 	"github.com/cjtoolkit/ignition/site/master"
 )
 
-func BuildErrorTemplate(context ctx.BackgroundContext) *template.Template {
+func BuildErrorTemplate(context ctx.Context) *template.Template {
 	return template.Must(master.CloneMasterTemplate(context).Parse(string(embedder.DecodeValue(internal.Error))))
 }

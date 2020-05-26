@@ -10,6 +10,6 @@ import (
 	"github.com/cjtoolkit/ignition/site/master"
 )
 
-func BuildIndexTemplate(context ctx.BackgroundContext) *template.Template {
+func BuildIndexTemplate(context ctx.Context) *template.Template {
 	return template.Must(master.CloneMasterTemplate(context).Parse(embedder.DecodeValueStr(internal.Index)))
 }

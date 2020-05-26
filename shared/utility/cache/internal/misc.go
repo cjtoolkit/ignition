@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cjtoolkit/ctx/ctxHttp"
+
 	"github.com/cjtoolkit/ctx"
 
 	"github.com/cjtoolkit/ignition/shared/utility/httpError"
@@ -31,6 +33,6 @@ func CheckIfModifiedSince(r *http.Request, modtime time.Time) {
 
 func CheckModifiedTime(modifiedTime time.Time, context ctx.Context) {
 	if !modifiedTime.IsZero() {
-		context.ResponseWriter().Header().Set("Last-Modified", modifiedTime.UTC().Format(http.TimeFormat))
+		ctxHttp.Response(context).Header().Set("Last-Modified", modifiedTime.UTC().Format(http.TimeFormat))
 	}
 }

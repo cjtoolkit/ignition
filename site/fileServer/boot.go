@@ -11,7 +11,7 @@ import (
 	"github.com/cjtoolkit/zipfs"
 )
 
-func Boot(context ctx.BackgroundContext) {
+func Boot(context ctx.Context) {
 	r := router.GetRouter(context)
 
 	if param.GetParam(context).Production == false {

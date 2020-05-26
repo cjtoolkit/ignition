@@ -4,12 +4,10 @@ import (
 	"bytes"
 	"html/template"
 
-	internal2 "github.com/cjtoolkit/ignition/site/master/internal/internal"
-
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/cookie"
-	"github.com/cjtoolkit/ignition/shared/utility/embedder"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
+	"github.com/cjtoolkit/ignition/site/master/internal"
 	internalMock "github.com/cjtoolkit/ignition/site/master/util/internal"
 )
 
@@ -19,7 +17,7 @@ type flashbagTemplate struct {
 
 func newFlashTemplateTemplate() flashbagTemplate {
 	return flashbagTemplate{
-		template: buildFlashBagHtml(),
+		template: internal.BuildFlashBagHtml(),
 	}
 }
 
@@ -37,7 +35,7 @@ func newFlashBag(errorService loggers.ErrorService, flashbagTemplate flashbagTem
 	}
 }
 
-func RegisterFlashBag(context ctx.BackgroundContext, m template.FuncMap) {
+func RegisterFlashBag(context ctx.Context, m template.FuncMap) {
 	_errorService := loggers.GetErrorService(context)
 	_flashBag := cookie.GetFlashBag(context)
 	_flashBagTemplate := newFlashTemplateTemplate()
@@ -85,8 +83,4 @@ func render(errorService loggers.ErrorService, t internalMock.Template, context 
 	errorService.CheckErrorAndLog(t.Execute(buf, context))
 
 	return buf.Bytes()
-}
-
-func buildFlashBagHtml() *template.Template {
-	return template.Must(template.New("FlashBag").Parse(embedder.DecodeValueStr(internal2.Flashbag)))
 }

@@ -6,6 +6,6 @@ import (
 	"github.com/cjtoolkit/ignition/site/errorPage/controller"
 )
 
-func Boot(context ctx.BackgroundContext) {
+func Boot(context ctx.Context) {
 	bootError(controller.NewErrorController(context), router.GetRouter(context))
 }

@@ -4,7 +4,7 @@ package internal
 
 const (
 	// Source: resources/Error.html
-	Error = `H4sIAAAAAAAC/1zOwQrCMAwG4LtP8bMHqOw+etKbguBeoHSZK452ZBEPoe8uzFWnt4T/I39U0VEf
-IqHyKQpFqZDzDgCaobaqMG2QkZBzsx9quySqeAYZYE7Ju7H4NQk9YhKYI/PBiTMXTt3DS0hxC5eC
-ablf4Jnm2d3eTZP9k0w/9irO31t2fuVMdvsDxa6UfbfP9AoAAP//nEnN5vQAAAA=`
+	Error = `H4sIAAAAAAAC/1yOwQrCMAyG7z7Fzx6gsvvoSW8Kgr5A6TJXHO3IIh5C310s25zeEr4vfFFFS12I
+hMqnKBSlQs47AGj62qpCggwEg5ybfV/bglTxCtLDnJJ3w3Iwk9AhJoE5Mh+cOHPh1D69hBS3YimM
+n8Aqnmma3J1KabR/JtOPexXnHzd2ftaZ7PYHiu0S+27r9A4AAP//Kg/kHPUAAAA=`
 )

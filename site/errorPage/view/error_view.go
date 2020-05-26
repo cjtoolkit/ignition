@@ -5,6 +5,8 @@ package view
 import (
 	"html/template"
 
+	"github.com/cjtoolkit/ctx/ctxHttp"
+
 	"github.com/cjtoolkit/ctx"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	"github.com/cjtoolkit/ignition/site/errorPage/model"
@@ -37,9 +39,9 @@ func (v errorView) ErrorTemplate(context ctx.Context, code int, title string, da
 		Local local
 	}
 
-	context.SetTitle(title)
+	ctxHttp.SetTitle(context, title)
 
-	res := context.ResponseWriter()
+	res := ctxHttp.Response(context)
 	res.WriteHeader(code)
 
 	err := v.errorTemplate.Execute(res, Context{

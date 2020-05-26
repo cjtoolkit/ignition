@@ -3,7 +3,8 @@ package errorPage
 import (
 	"net/http"
 
-	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ctx/ctxHttp"
+
 	"github.com/cjtoolkit/ignition/shared/utility/httpError"
 	"github.com/cjtoolkit/ignition/shared/utility/router"
 	"github.com/cjtoolkit/ignition/site/errorPage/controller"
@@ -11,7 +12,7 @@ import (
 
 func bootError(controller controller.ErrorController, router router.Router) {
 	showError := func(req *http.Request, code int, message string) {
-		controller.ShowError(ctx.GetContext(req), code, http.StatusText(code), message)
+		controller.ShowError(ctxHttp.Context(req), code, http.StatusText(code), message)
 	}
 
 	router.SetNotFound(http.HandlerFunc(func(_ http.ResponseWriter, request *http.Request) {

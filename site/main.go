@@ -17,7 +17,7 @@ var build = "Undefined"
 
 func boot() (http.Handler, param.Param) {
 	context := ctx.NewBackgroundContext()
-	defer ctx.ClearBackgroundContext(context)
+	defer ctx.ClearContext(context)
 
 	_param := param.GetParam(context)
 

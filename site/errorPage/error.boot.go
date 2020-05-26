@@ -3,7 +3,7 @@ package errorPage
 import (
 	"net/http"
 
-	"github.com/cjtoolkit/ctx/ctxHttp"
+	"github.com/cjtoolkit/ctx/v2/ctxHttp"
 
 	"github.com/cjtoolkit/ignition/shared/utility/httpError"
 	"github.com/cjtoolkit/ignition/shared/utility/router"

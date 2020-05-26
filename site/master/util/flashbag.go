@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html/template"
 
-	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/cookie"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	"github.com/cjtoolkit/ignition/site/master/internal"

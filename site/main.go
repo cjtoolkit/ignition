@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/command/param"
 	"github.com/cjtoolkit/ignition/shared/utility/router"
 	"github.com/cjtoolkit/ignition/site/errorPage"

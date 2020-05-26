@@ -5,9 +5,9 @@ package view
 import (
 	"html/template"
 
-	"github.com/cjtoolkit/ctx/ctxHttp"
+	"github.com/cjtoolkit/ctx/v2/ctxHttp"
 
-	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/loggers"
 	"github.com/cjtoolkit/ignition/site/errorPage/model"
 	"github.com/cjtoolkit/ignition/site/errorPage/view/internal"

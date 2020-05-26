@@ -1,7 +1,7 @@
 package homePage
 
 import (
-	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/shared/utility/router"
 	"github.com/cjtoolkit/ignition/site/homePage/controller"
 )

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/cjtoolkit/ctx"
+	"github.com/cjtoolkit/ctx/v2"
 	"github.com/cjtoolkit/ignition/site/homePage/model"
 	"github.com/cjtoolkit/ignition/site/homePage/view"
 )

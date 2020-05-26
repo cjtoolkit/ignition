@@ -6,10 +6,11 @@
 package view
 
 import (
-	ctx "github.com/cjtoolkit/ctx"
+	reflect "reflect"
+
+	ctx "github.com/cjtoolkit/ctx/v2"
 	model "github.com/cjtoolkit/ignition/site/errorPage/model"
 	gomock "github.com/golang/mock/gomock"
-	reflect "reflect"
 )
 
 // MockErrorView is a mock of ErrorView interface

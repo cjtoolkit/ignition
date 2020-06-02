@@ -4,15 +4,15 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/cjtoolkit/ctx/v2/ctxHttp"
-
-	"github.com/cjtoolkit/ignition/shared/utility/command/param"
-
 	"github.com/cjtoolkit/ctx/v2"
+	"github.com/cjtoolkit/ctx/v2/ctxHttp"
+	"github.com/cjtoolkit/ignition/shared/utility/command/param"
 	"github.com/julienschmidt/httprouter"
 )
 
-type Handle func(context ctx.Context, params Params)
+type paramKey struct{}
+
+type Handle func(context ctx.Context)
 
 type Router interface {
 	DELETE(path string, handle Handle)
@@ -64,16 +64,22 @@ func (r *router) SetMethodNotAllowed(h http.Handler) { r.router.MethodNotAllowed
 
 func (r *router) Handle(method, path string, handle Handle) {
 	r.router.Handle(method, path, func(_ http.ResponseWriter, request *http.Request, params httprouter.Params) {
-		handle(ctxHttp.Context(request), params)
+		context := ctxHttp.Context(request)
+		context.Set(paramKey{}, params)
+		handle(context)
 	})
 }
 
 func (r *router) Handler(method, path string, handler http.Handler) {
-	r.router.Handler(method, path, handler)
+	r.router.Handler(method, path, http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		context := ctxHttp.Context(request)
+		context.Set(paramKey{}, httprouter.ParamsFromContext(request.Context()))
+		handler.ServeHTTP(writer, request)
+	}))
 }
 
 func (r *router) HandlerFunc(method, path string, handler http.HandlerFunc) {
-	r.router.HandlerFunc(method, path, handler)
+	r.Handler(method, path, handler)
 }
 
 func (r *router) ServeFiles(path string, root http.FileSystem) { r.router.ServeFiles(path, root) }
@@ -92,4 +98,12 @@ func (r *router) SetPanicHandler(f func(http.ResponseWriter, *http.Request, inte
 
 func (r *router) Lookup(method, path string) (httprouter.Handle, Params, bool) {
 	return r.router.Lookup(method, path)
+}
+
+func ParamFromContext(context ctx.Context) Params {
+	p, found := context.Get(paramKey{})
+	if !found || p == nil {
+		return nil
+	}
+	return p.(Params)
 }

@@ -13,7 +13,7 @@ type homeBoot struct {
 }
 
 func (b homeBoot) boot() {
-	b.router.GET(urls.HomeIndex, func(context ctx.Context, _ router.Params) {
+	b.router.GET(urls.HomeIndex, func(context ctx.Context) {
 		b.homeController.Index(context)
 	})
 }

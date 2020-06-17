@@ -4,7 +4,7 @@ import (
 	"runtime/debug"
 
 	"github.com/cjtoolkit/ctx/v2"
-	"github.com/cjtoolkit/ignition/shared/utility/command/param"
+	"github.com/cjtoolkit/ignition/shared/utility/param"
 	"github.com/cjtoolkit/ignition/site/errorPage/model"
 	"github.com/cjtoolkit/ignition/site/errorPage/view"
 )

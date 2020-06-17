@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/cjtoolkit/ctx/v2"
-	"github.com/cjtoolkit/ignition/shared/utility/command/param"
+	"github.com/cjtoolkit/ignition/shared/utility/param"
 	"github.com/cjtoolkit/ignition/shared/utility/router"
 	"github.com/cjtoolkit/ignition/site/urls"
 	"github.com/cjtoolkit/zipfs"

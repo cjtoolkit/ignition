@@ -23,13 +23,13 @@ type errorView struct {
 }
 
 func NewErrorView(context ctx.Context) ErrorView {
-	return errorView{
+	return &errorView{
 		errorService:  loggers.GetErrorService(context),
 		errorTemplate: internal.BuildErrorTemplate(context),
 	}
 }
 
-func (v errorView) ErrorTemplate(context ctx.Context, code int, title string, data model.ErrorTemplateModel) {
+func (v *errorView) ErrorTemplate(context ctx.Context, code int, title string, data model.ErrorTemplateModel) {
 	type local struct {
 		ErrData model.ErrorTemplateModel
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/cjtoolkit/ignition/site/errorPage/controller"
 )
 
-func bootError(controller controller.ErrorController, router router.Router) {
+func bootError(controller *controller.ErrorController, router router.Router) {
 	showError := func(req *http.Request, code int, message string) {
 		controller.ShowError(ctxHttp.Context(req), code, http.StatusText(code), message)
 	}

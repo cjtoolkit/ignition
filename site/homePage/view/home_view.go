@@ -18,7 +18,7 @@ type HomeView interface {
 }
 
 func NewHomeView(context ctx.Context) HomeView {
-	return homeView{
+	return &homeView{
 		indexTpl:     internal.BuildIndexTemplate(context),
 		errorService: loggers.GetErrorService(context),
 	}
@@ -29,7 +29,7 @@ type homeView struct {
 	errorService loggers.ErrorService
 }
 
-func (h homeView) ExecIndexView(context ctx.Context, data model.Index) {
+func (h *homeView) ExecIndexView(context ctx.Context, data model.Index) {
 	ctxHttp.SetTitle(context, "Hello World")
 
 	type m struct {

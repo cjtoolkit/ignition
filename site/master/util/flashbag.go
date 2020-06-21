@@ -15,19 +15,19 @@ type flashbagTemplate struct {
 	template *template.Template
 }
 
-func newFlashTemplateTemplate() flashbagTemplate {
-	return flashbagTemplate{
+func newFlashTemplateTemplate() *flashbagTemplate {
+	return &flashbagTemplate{
 		template: internal.BuildFlashBagHtml(),
 	}
 }
 
 type FlashBag struct {
-	template     flashbagTemplate
+	template     *flashbagTemplate
 	flashBag     cookie.FlashBagValues
 	errorService loggers.ErrorService
 }
 
-func newFlashBag(errorService loggers.ErrorService, flashbagTemplate flashbagTemplate, flashBag cookie.FlashBagValues) FlashBag {
+func newFlashBag(errorService loggers.ErrorService, flashbagTemplate *flashbagTemplate, flashBag cookie.FlashBagValues) FlashBag {
 	return FlashBag{
 		template:     flashbagTemplate,
 		flashBag:     flashBag,

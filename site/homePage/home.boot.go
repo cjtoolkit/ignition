@@ -8,7 +8,7 @@ import (
 )
 
 type homeBoot struct {
-	homeController controller.HomeController
+	homeController *controller.HomeController
 	router         router.Router
 }
 

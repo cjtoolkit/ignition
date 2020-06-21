@@ -10,10 +10,10 @@ type HomeController struct {
 	view view.HomeView
 }
 
-func GetHomeController(context ctx.Context) HomeController {
-	return HomeController{view: view.NewHomeView(context)}
+func GetHomeController(context ctx.Context) *HomeController {
+	return &HomeController{view: view.NewHomeView(context)}
 }
 
-func (h HomeController) Index(context ctx.Context) {
+func (h *HomeController) Index(context ctx.Context) {
 	h.view.ExecIndexView(context, model.Index{Message: "Hello World"})
 }

@@ -15,7 +15,7 @@ import (
 func GetCacheRepository(context ctx.Context) cache.Repository {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return cache.Repository(cacheRepository{
+		return cache.Repository(&cacheRepository{
 			prefix:       cache.GetSettings(context).CachePrefix,
 			redisCore:    GetCore(context),
 			errorService: loggers.GetErrorService(context),
@@ -29,7 +29,7 @@ type cacheRepository struct {
 	errorService loggers.ErrorService
 }
 
-func (r cacheRepository) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
+func (r *cacheRepository) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	name = fmt.Sprintf(r.prefix, name)
 
 	var (
@@ -53,7 +53,7 @@ func (r cacheRepository) Persist(name string, expiration time.Duration, miss cac
 func GetCacheModifiedRepository(context ctx.Context) cache.ModifiedRepository {
 	type cacheModifiedRepositoryContext struct{}
 	return context.Persist(cacheModifiedRepositoryContext{}, func() (interface{}, error) {
-		return cache.ModifiedRepository(cacheModifiedRepository{
+		return cache.ModifiedRepository(&cacheModifiedRepository{
 			prefix:          cache.GetSettings(context).CachePrefixModified,
 			redisCore:       GetCore(context),
 			cacheRepository: GetCacheRepository(context),
@@ -69,7 +69,7 @@ type cacheModifiedRepository struct {
 	errorService    loggers.ErrorService
 }
 
-func (r cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
+func (r *cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	modifiedName := fmt.Sprintf(r.prefix, name)
 	modifiedTime := r.getModifiedTime(modifiedName, context)
 
@@ -91,7 +91,7 @@ func (r cacheModifiedRepository) Persist(context ctx.Context, name string, expir
 	return data
 }
 
-func (r cacheModifiedRepository) getModifiedTime(modifiedName string, context ctx.Context) time.Time {
+func (r *cacheModifiedRepository) getModifiedTime(modifiedName string, context ctx.Context) time.Time {
 	var modifiedTime time.Time
 	if b, err := r.redisCore.GetBytes(modifiedName); err == nil {
 		_ = json.Unmarshal(b, &modifiedTime)

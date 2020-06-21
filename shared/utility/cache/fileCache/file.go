@@ -42,7 +42,7 @@ func initFileCore(context ctx.Context) (Core, error) {
 		}
 	}
 
-	return core{
+	return &core{
 		directory:    cacheDir,
 		errorService: loggers.GetErrorService(context),
 	}, nil
@@ -53,12 +53,12 @@ type core struct {
 	errorService loggers.ErrorService
 }
 
-func (c core) GetBytes(key string) ([]byte, error) {
+func (c *core) GetBytes(key string) ([]byte, error) {
 	b, _, err := c.getBytes(key, -1)
 	return b, err
 }
 
-func (c core) GetBytesCheck(key string, expiration time.Duration) ([]byte, error) {
+func (c *core) GetBytesCheck(key string, expiration time.Duration) ([]byte, error) {
 	b, expired, err := c.getBytes(key, expiration)
 	if expired {
 		return nil, fmt.Errorf("key %q has expired", key)
@@ -66,13 +66,13 @@ func (c core) GetBytesCheck(key string, expiration time.Duration) ([]byte, error
 	return b, err
 }
 
-func (c core) MustGetBytes(key string) []byte {
+func (c *core) MustGetBytes(key string) []byte {
 	b, err := c.GetBytes(key)
 	c.errorService.CheckErrorAndPanic(err)
 	return b
 }
 
-func (c core) SetBytes(key string, value []byte, expiration time.Duration) {
+func (c *core) SetBytes(key string, value []byte, expiration time.Duration) {
 	file, err := os.Create(c.formatKey(key))
 	c.errorService.CheckErrorAndPanic(err)
 
@@ -82,28 +82,28 @@ func (c core) SetBytes(key string, value []byte, expiration time.Duration) {
 	c.errorService.CheckErrorAndPanic(file.Close())
 }
 
-func (c core) Exist(key string) bool {
+func (c *core) Exist(key string) bool {
 	_, err := os.Stat(c.formatKey(key))
 	return os.IsExist(err)
 }
 
-func (c core) Delete(keys ...string) {
+func (c *core) Delete(keys ...string) {
 	for _, key := range keys {
 		_ = os.Remove(c.formatKey(key))
 	}
 }
 
-func (c core) Stat(key string) (os.FileInfo, error) {
+func (c *core) Stat(key string) (os.FileInfo, error) {
 	return os.Stat(c.formatKey(key))
 }
 
-func (c core) formatKey(key string) string {
+func (c *core) formatKey(key string) string {
 	hash := sha256.New()
 	_, _ = fmt.Fprint(hash, key)
 	return c.directory + filepath.FromSlash("/"+fmt.Sprintf("%x.txt", hash.Sum(nil)))
 }
 
-func (c core) getBytes(key string, expiration time.Duration) ([]byte, bool, error) {
+func (c *core) getBytes(key string, expiration time.Duration) ([]byte, bool, error) {
 	fileName := c.formatKey(key)
 	stat, err := os.Stat(fileName)
 	if os.IsNotExist(err) {

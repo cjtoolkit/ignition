@@ -24,7 +24,7 @@ type Helper interface {
 func GetHelper(context ctx.Context) Helper {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return Helper(cookieHelper{
+		return Helper(&cookieHelper{
 			secureCookie: securecookie.New(convertToByte(configuration.GetConfig(context).CookieKey), nil),
 			errorService: loggers.GetErrorService(context),
 		}), nil
@@ -36,7 +36,7 @@ type cookieHelper struct {
 	errorService loggers.ErrorService
 }
 
-func (h cookieHelper) Set(context ctx.Context, cookie *http.Cookie) {
+func (h *cookieHelper) Set(context ctx.Context, cookie *http.Cookie) {
 	var err error
 	cookie.Value, err = h.secureCookie.Encode(cookie.Name, cookie.Value)
 	h.errorService.CheckErrorAndPanic(err)
@@ -44,17 +44,17 @@ func (h cookieHelper) Set(context ctx.Context, cookie *http.Cookie) {
 	http.SetCookie(ctxHttp.Response(context), cookie)
 }
 
-func (h cookieHelper) Get(context ctx.Context, name string) *http.Cookie {
+func (h *cookieHelper) Get(context ctx.Context, name string) *http.Cookie {
 	cookie, err := ctxHttp.Request(context).Cookie(name)
 	return internal.GetCookieDecodeAndErrorCheck(name, cookie, err, h.secureCookie)
 }
 
-func (h cookieHelper) GetValue(context ctx.Context, name string) string {
+func (h *cookieHelper) GetValue(context ctx.Context, name string) string {
 	cookie := h.Get(context, name)
 	return internal.GetCookieValue(cookie)
 }
 
-func (h cookieHelper) Delete(context ctx.Context, name string) {
+func (h *cookieHelper) Delete(context ctx.Context, name string) {
 	http.SetCookie(ctxHttp.Response(context), &http.Cookie{
 		Name:   name,
 		MaxAge: -1,

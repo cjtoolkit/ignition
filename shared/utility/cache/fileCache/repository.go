@@ -25,14 +25,14 @@ type cacheRepository struct {
 }
 
 func initCacheRepository(context ctx.Context) cache.Repository {
-	return cacheRepository{
+	return &cacheRepository{
 		prefix:       cache.GetSettings(context).CachePrefix,
 		core:         GetCore(context),
 		errorService: loggers.GetErrorService(context),
 	}
 }
 
-func (c cacheRepository) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
+func (c *cacheRepository) Persist(name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	name = fmt.Sprintf(c.prefix, name)
 
 	var (
@@ -68,7 +68,7 @@ type cacheModifiedRepository struct {
 }
 
 func initCacheModifiedRepository(context ctx.Context) cache.ModifiedRepository {
-	return cacheModifiedRepository{
+	return &cacheModifiedRepository{
 		prefix:          cache.GetSettings(context).CachePrefix,
 		core:            GetCore(context),
 		cacheRepository: GetCacheRepository(context),
@@ -76,7 +76,7 @@ func initCacheModifiedRepository(context ctx.Context) cache.ModifiedRepository {
 	}
 }
 
-func (c cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
+func (c *cacheModifiedRepository) Persist(context ctx.Context, name string, expiration time.Duration, miss cache.Miss, hit cache.Hit) interface{} {
 	modifiedName := fmt.Sprintf(name, c.prefix)
 	modifiedTime := c.getModifiedTime(modifiedName, expiration, context)
 
@@ -96,7 +96,7 @@ func (c cacheModifiedRepository) Persist(context ctx.Context, name string, expir
 	return data
 }
 
-func (c cacheModifiedRepository) getModifiedTime(name string, expiration time.Duration, context ctx.Context) time.Time {
+func (c *cacheModifiedRepository) getModifiedTime(name string, expiration time.Duration, context ctx.Context) time.Time {
 	var modifiedTime time.Time
 
 	stat, err := c.core.Stat(name)

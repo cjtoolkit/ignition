@@ -35,7 +35,7 @@ type ParamBuilder interface {
 func GetParamBuilder(context ctx.Context) ParamBuilder {
 	type paramBuilderContext struct{}
 	return context.Persist(paramBuilderContext{}, func() (interface{}, error) {
-		return ParamBuilder(paramBuilder{
+		return ParamBuilder(&paramBuilder{
 			paramRegExp: regexp.MustCompile(`:([a-zA-Z_]+)`),
 			searchWith:  string([]byte{':', ':'}),
 			replaceWith: string([]byte{0, ':', 0, ':', 0}),
@@ -49,7 +49,7 @@ type paramBuilder struct {
 	replaceWith string
 }
 
-func (p paramBuilder) BuildParamTemplate(query string) (string, ParamTemplate) {
+func (p *paramBuilder) BuildParamTemplate(query string) (string, ParamTemplate) {
 	paramTemplate := paramTemplate{}
 	got := map[string]bool{}
 	count := 0
@@ -69,7 +69,7 @@ func (p paramBuilder) BuildParamTemplate(query string) (string, ParamTemplate) {
 	return query, paramTemplate
 }
 
-func (p paramBuilder) BuildParamTemplateAndPrepare(dbConn *sql.DB, query string) (*sql.Stmt, ParamTemplate, error) {
+func (p *paramBuilder) BuildParamTemplateAndPrepare(dbConn *sql.DB, query string) (*sql.Stmt, ParamTemplate, error) {
 	query, template := p.BuildParamTemplate(query)
 	stmt, err := dbConn.Prepare(query)
 	return stmt, template, err

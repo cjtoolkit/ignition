@@ -35,7 +35,7 @@ func GetController(context ctx.Context) Controller {
 }
 
 func initCsrfController(context ctx.Context) Controller {
-	return csrfController{
+	return &csrfController{
 		csrfProtect: csrf.Protect(
 			convertToByte(configuration.GetConfig(context).CsrfKey),
 			csrf.Secure(false),
@@ -50,14 +50,14 @@ type csrfController struct {
 	csrfProtect func(http.Handler) http.Handler
 }
 
-func (c csrfController) GetCsrfData(context ctx.Context) Data {
+func (c *csrfController) GetCsrfData(context ctx.Context) Data {
 	type csrfDataContext struct{}
 	return context.Persist(csrfDataContext{}, func() (interface{}, error) {
 		return c.getCsrfData(context), nil
 	}).(Data)
 }
 
-func (c csrfController) getCsrfData(context ctx.Context) Data {
+func (c *csrfController) getCsrfData(context ctx.Context) Data {
 	var data Data
 
 	c.csrfProtect(http.HandlerFunc(func(_ http.ResponseWriter, req *http.Request) {
@@ -70,11 +70,11 @@ func (c csrfController) getCsrfData(context ctx.Context) Data {
 	return data
 }
 
-func (c csrfController) InitCsrf(context ctx.Context) {
+func (c *csrfController) InitCsrf(context ctx.Context) {
 	c.GetCsrfData(context)
 }
 
-func (c csrfController) CheckCsrf(context ctx.Context) {
+func (c *csrfController) CheckCsrf(context ctx.Context) {
 	c.GetCsrfData(context)
 }
 

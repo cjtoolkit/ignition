@@ -66,7 +66,7 @@ type FlashBag interface {
 func GetFlashBag(context ctx.Context) FlashBag {
 	type flashBagContext struct{}
 	return context.Persist(flashBagContext{}, func() (interface{}, error) {
-		return FlashBag(flashBag{
+		return FlashBag(&flashBag{
 			sessionName:  GetFlashBagSetting(context).FlashBagSession,
 			session:      GetSession(context),
 			errorService: loggers.GetErrorService(context),
@@ -80,7 +80,7 @@ type flashBag struct {
 	errorService loggers.ErrorService
 }
 
-func (f flashBag) GetFlashBag(context ctx.Context) FlashBagValues {
+func (f *flashBag) GetFlashBag(context ctx.Context) FlashBagValues {
 	type flashBagContext struct{}
 	return context.Persist(flashBagContext{}, func() (interface{}, error) {
 		fB := FlashBagValues{}
@@ -92,7 +92,7 @@ func (f flashBag) GetFlashBag(context ctx.Context) FlashBagValues {
 	}).(FlashBagValues)
 }
 
-func (f flashBag) SaveFlashBagToSession(context ctx.Context) {
+func (f *flashBag) SaveFlashBagToSession(context ctx.Context) {
 	fB := f.GetFlashBag(context)
 	b, err := json.Marshal(fB)
 	f.errorService.CheckErrorAndPanic(err)

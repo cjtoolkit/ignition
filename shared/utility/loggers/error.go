@@ -19,19 +19,19 @@ type ErrorService interface {
 func GetBlankErrorService(context ctx.Context) ErrorService {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return initErrorService(logOutputRegistryBlank{}), nil
+		return ErrorService(initErrorService(logOutputRegistryBlank{})), nil
 	}).(ErrorService)
 }
 
 func GetErrorService(context ctx.Context) ErrorService {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return initErrorService(newLogOutputRegistry()), nil
+		return ErrorService(initErrorService(newLogOutputRegistry())), nil
 	}).(ErrorService)
 }
 
-func initErrorService(registry LogOutputRegistry) errorService {
-	return errorService{
+func initErrorService(registry LogOutputRegistry) *errorService {
+	return &errorService{
 		log: customLog{
 			Logger:            log.New(os.Stderr, "INFO: ", log.Lshortfile),
 			logOutputRegistry: registry,
@@ -44,19 +44,19 @@ type errorService struct {
 	log Logger
 }
 
-func (e errorService) CheckErrorAndPanic(err error) {
+func (e *errorService) CheckErrorAndPanic(err error) {
 	if nil != err {
 		e.log.Panic(err)
 	}
 }
 
-func (e errorService) CheckErrorAndLog(err error) {
+func (e *errorService) CheckErrorAndLog(err error) {
 	if nil != err {
 		e.log.Print(err)
 	}
 }
 
-func (e errorService) GetLogger() Logger { return e.log.Clone(2) }
+func (e *errorService) GetLogger() Logger { return e.log.Clone(2) }
 
 type ErrorCollector []error
 

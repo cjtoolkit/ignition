@@ -20,8 +20,8 @@ func GetMainSqlDatabase(context ctx.Context) *sql.DB {
 	}).(*sql.DB)
 }
 
-func GetMainSqlPrepareKit(context ctx.Context) PrepareKit {
-	return PrepareKit{
+func GetMainSqlPrepareKit(context ctx.Context) *PrepareKit {
+	return &PrepareKit{
 		DB:           GetMainSqlDatabase(context),
 		Builder:      GetParamBuilder(context),
 		ErrorService: loggers.GetErrorService(context),
@@ -34,17 +34,17 @@ type PrepareKit struct {
 	ErrorService loggers.ErrorService
 }
 
-func (k PrepareKit) Prepare(query string) *sql.Stmt {
+func (k *PrepareKit) Prepare(query string) *sql.Stmt {
 	stmt, err := k.DB.Prepare(query)
 	k.ErrorService.CheckErrorAndPanic(err)
 	return stmt
 }
 
-func (k PrepareKit) DecodePrepare(query string) *sql.Stmt {
+func (k *PrepareKit) DecodePrepare(query string) *sql.Stmt {
 	return k.Prepare(embedder.DecodeValueStr(query))
 }
 
-func (k PrepareKit) PrepareParam(query string) StmtParam {
+func (k *PrepareKit) PrepareParam(query string) StmtParam {
 	stmt, param, err := k.Builder.BuildParamTemplateAndPrepare(k.DB, query)
 	k.ErrorService.CheckErrorAndPanic(err)
 	return StmtParam{
@@ -53,6 +53,6 @@ func (k PrepareKit) PrepareParam(query string) StmtParam {
 	}
 }
 
-func (k PrepareKit) DecodePrepareParam(query string) StmtParam {
+func (k *PrepareKit) DecodePrepareParam(query string) StmtParam {
 	return k.PrepareParam(embedder.DecodeValueStr(query))
 }

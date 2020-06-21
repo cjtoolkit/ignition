@@ -49,7 +49,7 @@ type Session interface {
 func GetSession(context ctx.Context) Session {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
-		return Session(session{
+		return Session(&session{
 			setting:      *GetSessionSettings(context),
 			cache:        defaultCache.CacheCore(context),
 			cookie:       GetHelper(context),
@@ -65,7 +65,7 @@ type session struct {
 	errorService loggers.ErrorService
 }
 
-func (s session) getSerial(context ctx.Context) string {
+func (s *session) getSerial(context ctx.Context) string {
 	return coalesce.Strings(
 		func() string {
 			return s.cookie.GetValue(context, s.setting.SessionCookie)
@@ -86,7 +86,7 @@ func (s session) getSerial(context ctx.Context) string {
 	)
 }
 
-func (s session) getSerialPersist(context ctx.Context) string {
+func (s *session) getSerialPersist(context ctx.Context) string {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		return s.getSerial(context), nil
@@ -99,7 +99,7 @@ type sessionData struct {
 	HmacKey       string
 }
 
-func (s session) data(context ctx.Context) *sessionData {
+func (s *session) data(context ctx.Context) *sessionData {
 	type c struct{}
 	return context.Persist(c{}, func() (interface{}, error) {
 		keys := strings.Split(s.getSerialPersist(context), ",")
@@ -111,7 +111,7 @@ func (s session) data(context ctx.Context) *sessionData {
 	}).(*sessionData)
 }
 
-func (s session) updateCookie(context ctx.Context) {
+func (s *session) updateCookie(context ctx.Context) {
 	s.cookie.Set(context, &http.Cookie{
 		Name:   s.setting.SessionCookie,
 		Value:  s.getSerialPersist(context),
@@ -119,35 +119,35 @@ func (s session) updateCookie(context ctx.Context) {
 	})
 }
 
-func (s session) formatName(serial, name string) string {
+func (s *session) formatName(serial, name string) string {
 	return fmt.Sprintf(s.setting.SessionCachePrefix, serial, name)
 }
 
-func (s session) Set(context ctx.Context, name string, value []byte) {
+func (s *session) Set(context ctx.Context, name string, value []byte) {
 	d := s.data(context)
 	s.cache.SetBytes(s.formatName(d.SessionKey, name),
 		internal.Sign(d.HmacKey, internal.Encrypt(d.EncryptionKey, value)), 1*time.Hour)
 	s.updateCookie(context)
 }
 
-func (s session) Get(context ctx.Context, name string) []byte {
+func (s *session) Get(context ctx.Context, name string) []byte {
 	d := s.data(context)
 	b, _ := cache.GetAndCheckExpiration(s.cache, s.formatName(d.SessionKey, name), 1*time.Hour)
 	b = internal.Decrypt(d.EncryptionKey, internal.Check(d.HmacKey, b))
 	return b
 }
 
-func (s session) Delete(context ctx.Context, name string) {
+func (s *session) Delete(context ctx.Context, name string) {
 	s.cache.Delete(s.formatName(s.data(context).SessionKey, name))
 }
 
-func (s session) GetDel(context ctx.Context, name string) []byte {
+func (s *session) GetDel(context ctx.Context, name string) []byte {
 	b := s.Get(context, name)
 	s.Delete(context, name)
 
 	return b
 }
 
-func (s session) Destroy(context ctx.Context) {
+func (s *session) Destroy(context ctx.Context) {
 	s.cookie.Delete(context, s.setting.SessionCookie)
 }

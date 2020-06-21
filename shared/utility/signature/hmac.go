@@ -24,7 +24,7 @@ type HmacUtil interface {
 func GetHmacUtil(context ctx.Context) HmacUtil {
 	type HmacUtilContext struct{}
 	return context.Persist(HmacUtilContext{}, func() (interface{}, error) {
-		return HmacUtil(hmacUtil{
+		return HmacUtil(&hmacUtil{
 			key:          convertToByte(configuration.GetConfig(context).HmacKey),
 			errorService: loggers.GetErrorService(context),
 		}), nil
@@ -36,17 +36,17 @@ type hmacUtil struct {
 	errorService loggers.ErrorService
 }
 
-func (u hmacUtil) SignWithKey(key []byte, message []byte) []byte {
+func (u *hmacUtil) SignWithKey(key []byte, message []byte) []byte {
 	sum := hmacSum(message, key)
 
 	return append(sum, message...)
 }
 
-func (u hmacUtil) Sign(message []byte) []byte {
+func (u *hmacUtil) Sign(message []byte) []byte {
 	return u.SignWithKey(u.key, message)
 }
 
-func (u hmacUtil) CheckWithKey(key []byte, message []byte) []byte {
+func (u *hmacUtil) CheckWithKey(key []byte, message []byte) []byte {
 	checkErrorAndForbid(checkSize(message))
 
 	currentSum := message[:sha512.Size]
@@ -57,7 +57,7 @@ func (u hmacUtil) CheckWithKey(key []byte, message []byte) []byte {
 	return message
 }
 
-func (u hmacUtil) Check(message []byte) []byte {
+func (u *hmacUtil) Check(message []byte) []byte {
 	return u.CheckWithKey(u.key, message)
 }
 

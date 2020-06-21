@@ -33,7 +33,7 @@ func initRedisCore(context ctx.Context) (Core, error) {
 		return nil, err
 	}
 
-	return redisCore{
+	return &redisCore{
 		radixPool:    radixPool,
 		errorService: loggers.GetErrorService(context),
 	}, nil
@@ -44,7 +44,7 @@ type redisCore struct {
 	errorService loggers.ErrorService
 }
 
-func (r redisCore) GetBytes(key string) ([]byte, error) {
+func (r *redisCore) GetBytes(key string) ([]byte, error) {
 	if !r.Exist(key) {
 		return nil, fmt.Errorf("key %q is not found", key)
 	}
@@ -53,29 +53,29 @@ func (r redisCore) GetBytes(key string) ([]byte, error) {
 	return b, err
 }
 
-func (r redisCore) MustGetBytes(key string) []byte {
+func (r *redisCore) MustGetBytes(key string) []byte {
 	b, err := r.GetBytes(key)
 	r.errorService.CheckErrorAndPanic(err)
 
 	return b
 }
 
-func (r redisCore) SetBytes(key string, value []byte, expiration time.Duration) {
+func (r *redisCore) SetBytes(key string, value []byte, expiration time.Duration) {
 	r.errorService.CheckErrorAndPanic(r.radixPool.Do(radix.FlatCmd(nil, "SET", key, value,
 		"EX", int64(expiration.Seconds()),
 	)))
 }
 
-func (r redisCore) Exist(key string) bool {
+func (r *redisCore) Exist(key string) bool {
 	var i int64
 	_ = r.radixPool.Do(radix.Cmd(&i, "EXISTS", key))
 	return i > 0
 }
 
-func (r redisCore) Delete(keys ...string) {
+func (r *redisCore) Delete(keys ...string) {
 	_ = r.radixPool.Do(radix.Cmd(nil, "DEL", keys...))
 }
 
-func (r redisCore) Cmd(rcv interface{}, cmd, key string, args ...interface{}) error {
+func (r *redisCore) Cmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	return r.radixPool.Do(radix.FlatCmd(rcv, cmd, key, args...))
 }

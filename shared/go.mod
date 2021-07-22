@@ -12,6 +12,6 @@ require (
 	github.com/lib/pq v1.5.1
 	github.com/mediocregopher/radix/v3 v3.5.0
 	github.com/pkg/errors v0.9.1
-	go.mongodb.org/mongo-driver v1.3.3
+	go.mongodb.org/mongo-driver v1.5.1
 	golang.org/x/crypto v0.0.0-20200429183012-4b2356b1ed79
 )
